@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="IFPA Rules">
+<title>IFPA Rules Search (Unofficial)</title>
+<script>(function(){var t="dark";try{t=localStorage.getItem("theme")==="light"?"light":"dark"}catch(e){}document.documentElement.setAttribute("data-theme",t)})();</script>
+<style>
+:root{
+  --bg:#0f1115; --panel:#181b21; --ink:#eceff4; --muted:#99a1ae; --line:#2a2f38;
+  --accent:#e5e9f0; --accent-ink:#0f1115; --mark:#e08a00; --hit:#4a330f; --focus:#c9cfd9;
+  --hf:"Gill Sans","Gill Sans MT",Calibri,sans-serif; --bf:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f3f4f6; --panel:#ffffff; --ink:#111827; --muted:#5b6472; --line:#d7dbe2;
+  --accent:#1f2937; --accent-ink:#ffffff; --mark:#ff9500; --hit:#f6d9b1; --focus:#6b7280;
+  color-scheme:light;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 var(--bf)}
+.brand strong,.stitle,h2.label,.sec-title,.sec-part,.toc h3,.back,.pager a small{font-family:var(--hf)}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 16px calc(10px) 16px;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.top-in{max-width:760px;margin:0 auto}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.ttl{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.brand .ttl .unoff{display:inline-block;padding:0 6px;border-radius:3px;background:#ff9500;color:#111827;font:700 10px/1.5 var(--hf);letter-spacing:1.2px;text-transform:uppercase}
+.themebtn{margin-top:2px;min-height:32px;padding:0 4px;border:0;background:transparent;color:var(--muted);font:inherit;font-family:var(--hf);font-size:12.5px;cursor:pointer;text-decoration:underline}
+.homelink,.homelink:hover{color:inherit;text-decoration:none}
+.brand strong{font-size:28px;line-height:1.1;letter-spacing:-.3px}
+.brand .src{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.brand .src a{font-size:12.5px;color:var(--accent);font-weight:600}
+.brand span{font-size:12.5px;color:var(--muted)}
+.field{position:relative}
+.field input{width:100%;min-height:48px;padding:0 44px 0 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font:inherit;-webkit-appearance:none;appearance:none}
+.field input::-webkit-search-cancel-button{-webkit-appearance:none}
+.clear{position:absolute;right:2px;top:2px;width:44px;height:44px;border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;display:none}
+.field.has .clear{display:block}
+main{max-width:760px;margin:0 auto;padding:16px;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:12px}
+h2.label{margin:20px 0 8px;font-size:12.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.toc .tgroup{margin:26px 0 2px;font:700 22px/1.2 var(--hf);letter-spacing:.2px}
+.trow{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px;padding:8px 2px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+.qlist .trow:last-child{border-bottom:0}
+.trow::after{content:"\203A";color:var(--muted);font-size:20px;line-height:1}
+.trow .tn{flex:1}
+.trow small{color:var(--muted);font-size:12.5px}
+.csi{margin:0 0 20px}
+.sec-title + .csi{margin-top:16px}
+.csi .sec-part{margin:0}
+.gdef{margin:0 0 6px;padding:2px 0 2px 14px;border-left:3px solid var(--line);font-size:18px;line-height:1.5}
+.gmean{margin:0 0 6px;font-size:18px;line-height:1.5}
+.gtag{margin-left:auto;font:600 11px var(--hf);letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.card.gcard{border-style:dashed}
+.trow .tn .sid{margin-right:10px}
+.toc a[aria-current="true"]{font-weight:700}
+.tf{margin:0 0 14px}
+.tf .tfh{display:flex;justify-content:space-between;align-items:baseline}
+.tf h2.label{margin:0 0 8px}
+.tclear{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;min-height:32px}
+.tfchip{min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.tfchip small{color:var(--muted);margin-left:6px;font-size:12px}
+.tfchip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tfchip[aria-pressed="true"]::before{content:"\2713\00a0"}
+.tfchip[aria-pressed="true"] small{color:inherit;opacity:.75}
+details.allsec>summary{margin:22px 0 4px;min-height:44px;display:flex;align-items:center;font:600 15px var(--hf);cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:22px;background:var(--panel);color:var(--ink);font:inherit;font-size:15px;cursor:pointer}
+.card{display:block;margin:0 0 10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:inherit;text-decoration:none}
+.card:active{background:var(--hit)}
+.card-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.sid{font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);white-space:nowrap}
+.stitle{font-weight:600}
+.snip{font-size:15px;color:var(--ink)}
+.meta{margin-top:6px;font-size:12.5px;color:var(--muted)}
+mark{background:var(--mark);color:#111827;border-radius:3px;padding:0 1px;font-weight:700}
+.note{padding:12px 14px;border:1px dashed var(--line);border-radius:12px;color:var(--muted)}
+.toc h3{margin:18px 0 6px;font-size:15px}
+.toc a{display:flex;gap:12px;align-items:baseline;min-height:44px;padding:8px 2px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+.toc a .sid{min-width:52px}
+.back{display:inline-flex;align-items:center;min-height:44px;margin:-6px 0 4px -4px;padding:0 4px;color:var(--accent);text-decoration:none;font-weight:600}
+.sec-title{margin:0 0 2px;font-size:22px;line-height:1.25}
+.sec-part{margin:0 0 14px;font-size:13px;color:var(--muted)}
+.chunk{margin:0 0 12px;padding:2px 0}
+.chunk.li{padding-left:18px;position:relative}
+.chunk.li::before{content:"\2022";position:absolute;left:4px;color:var(--muted)}
+.chunk.hit{background:var(--hit);margin-left:-10px;margin-right:-10px;padding:6px 10px;border-radius:8px}
+.chunk.li.hit::before{left:14px}
+.chunk.li.hit{padding-left:28px}
+.pager{display:flex;gap:10px;margin-top:22px}
+.pager a{flex:1;min-height:56px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-decoration:none;font-size:14px}
+.pager a small{display:block;color:var(--muted);font-size:12px}
+.pager a.next{text-align:right}
+footer{max-width:760px;margin:0 auto;padding:0 16px 28px;font-size:12.5px;color:var(--muted)}
+footer p{margin:0;padding-top:14px;border-top:1px solid var(--line)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0f1115">
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand"><div class="ttl"><strong><a class="homelink" href="#">IFPA Rules Search</a></strong><span class="unoff">Unofficial</span></div><div class="src"><a href="https://www.ifpapinball.com/?p=8493" target="_blank" rel="noopener">IFPA rules</a><span id="ver"></span><button type="button" class="themebtn" id="themebtn"></button></div></div>
+  <form class="field" id="field" role="search" onsubmit="return false">
+    <label class="sr" for="q">Search the rulebook</label>
+    <input id="q" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Search the rules, e.g. stuck ball">
+    <button type="button" class="clear" id="clear" aria-label="Clear search">&times;</button>
+  </form>
+</div></header>
+<main id="main" aria-live="polite"></main>
+<footer id="foot"></footer>
+
+<script id="rb-data" type="application/json">{"version":"v2025.08.10","parts":{"I":"Malfunctions and Rulings","II":"Machine Settings","III":"Player Conduct","IV":"Miscellaneous"},"sections":[{"id":"About","title":"About these rules","part":"","chunks":[{"k":"p","t":"This document contains the unified PAPA/IFPA ruleset, and is the baseline for all PAPA or IFPA-related competitive pinball rulings. While certain formats will need additional rule verbiage to handle specific situations, we recommend Tournament Directors use these rules as their foundation when dealing with malfunctions and other logistics inherent in running a tournament or league."},{"k":"p","t":"Leagues and tournaments are welcome to copy these rules and adapt them as needed but are required, as per the Creative Commons license, to cite the original source PAPA.org within their own ruleset."},{"k":"p","t":"This document is actively updated, and all leagues and tournaments using this ruleset as a guide are encouraged to update their own rules at least once per year."}]},{"id":"I.1","title":"The Nature of Pinball","part":"I","chunks":[{"k":"p","t":"The unique charm of pinball lies, in large part, in the physical nature of the game. Unfortunately, this means that unusual events and outright malfunctions cannot be prevented, nor can they be perfectly compensated for. IFPA/PAPA attempts to strike a balance between compensating for malfunctions and accepting the physical nature of the game."},{"k":"p","t":"In certain cases, malfunctions will be dealt with more strictly during final rounds than during qualifying rounds, at the discretion of Tournament Officials."}]},{"id":"I.2","title":"Minor Malfunctions","part":"I","chunks":[{"k":"p","t":"A minor malfunction is any incident without external cause which deviates from the normal course of gameplay, without directly causing a player’s loss of turn and without providing any player a significant advantage over others. A minor malfunction is considered part of normal play. Tournament Officials shall determine what constitutes a significant advantage; in the event that such an advantage is obtained, refer to “Beneficial Malfunctions”."},{"k":"p","t":"A minor malfunction that occurs repeatedly, to the extent that it is markedly affecting play of the machine, may be considered a major malfunction at the sole discretion of Tournament Officials. If a player receives a tilt warning caused inadvertently by another player’s action, please see the “Player Errors” section for how that situation will be handled."}]},{"id":"I.3","title":"Major Malfunctions","part":"I","chunks":[{"k":"p","t":"A major malfunction is a gameplay problem with a machine that results in the premature loss of ball in play in a fashion that is not a normal feature of the machine’s gameplay. These may be unusual one-time events, or they may indicate a recurring problem that will need to be addressed by technicians."},{"k":"p","t":"Examples of major malfunctions include:"},{"k":"li","t":"The bonus count begins while the ball is still in play. This can happen if, for example, the machine loses track of how many balls are in the drain trough."},{"k":"li","t":"A flipper or other major playfield feature ceases to function."},{"k":"p","t":"Note that unrepeated physical failures, such as kickbacks or balls jumping off ramps, balls flying over flippers, or balls moonwalking into the outlane following a successful shot do not qualify as major malfunctions. This is the physical nature of pinball."},{"k":"p","t":"Any malfunction that results in the loss of one or more balls during multiball play, without losing all balls so as to end the player’s turn, will only be considered a minor malfunction. Loss of any lit feature, running mode, or other gameplay specifics, shall not be considered a major malfunction. Loss of Tilt warnings, without loss of ball, shall not be considered a major malfunction. If the loss of Tilt warnings was caused by another player, please see the “Player Errors” section for how that situation will be handled."},{"k":"p","t":"Should a player lose a ball due to a flipper not engaging when the flipper button is pressed, or due to a flipper sticking in the held position when the flipper button is pressed, they should immediately notify a Tournament Official. The Tournament Official will attempt to recreate the problem by pressing the flipper button for up to 3 minutes. If the Tournament Official is able to recreate the problem, this will be treated as a Major Malfunction. If the problem is not able to be recreated, this will not be treated as a Major Malfunction and play will continue. If the game is in multiball play and one or more balls are lost as a result of this kind of issue, possibly ending multiball but not ending the ball in play, this will be considered no worse than a minor malfunction."},{"k":"p","t":"When a major malfunction occurs, it is the player’s responsibility to notify the Scorekeeper, calmly and promptly. The Scorekeeper will request advice from a Tournament Official. If the Official(s) agree that the incident is a major malfunction, one of the following steps will be taken, in order of priority:"},{"k":"li","t":"If the machine’s software supports adding balls to a game already in progress, a Tournament Official will add a ball to the game in progress and the affected player will complete their game. All other players will continue to play their game as normal, without skipping a ball."},{"k":"li","t":"If the major malfunction cannot be fixed without resetting the machine, the player’s score will be recorded and their game will be terminated and restarted. The affected player will continue their remaining balls on the restarted game and their score from the aborted game will be added to their total. For example, if such a malfunction occurs on Ball 2 of a 3-ball game, the player will be given two new balls on a restarted game. In multiplayer games, all players will receive the same compensation."},{"k":"li","t":"If the major malfunction can be fixed without resetting the machine, the player will be provided with one additional ball of play at the beginning of a new game, after the current game has been completed. The player’s total score on the additional ball will be added to their previous score, and the new game will be terminated."},{"k":"p","t":"Tournament Directors may allow the player to play ball 3 or 5 of the new game, if that player has been denied certain features that are freely awarded by the machine. Examples of this include ‘Double Bonus’ balls on many EM machines, as well as pity Mist Multiball on Dracula should the player have not yet played one. The player’s total score on the additional ball of play will be added to their previous score, and the new game will be terminated. Tournament Directors will NEVER attempt to re-establish the state of any game features at the time of the Major or Catastrophic Malfunction."},{"k":"p","t":"In the event that two or more major malfunctions take place during the same game, the current scores of the player(s) will be recorded, and the game terminated. Once the machine has been repaired, players will be provided additional ball(s) of play on a new game, as necessary to provide the correct number of balls of play for each player. In the event that a recurring major malfunction cannot suitably be repaired, the failure must be treated as a catastrophic malfunction."},{"k":"p","t":"Under certain specific conditions, a major malfunction may be declined by the player. This must be approved by the Tournament Official, and must not result in a situation which provides an unfair advantage to the player."}]},{"id":"I.4","title":"Known Malfunctions","part":"I","chunks":[{"k":"p","t":"Any malfunction or unusual behavior that is determined to be relatively minor but unusual enough to merit comment may, at the discretion of Tournament Officials, be posted for players to be aware of before playing the affected machine. Players who have played the machine before this notice is provided will not be allowed to replay the machine nor to replace it with play of another machine. The occurrence of any posted malfunction will be treated as a minor malfunction unless it worsens or interacts with another feature to yield a major malfunction."}]},{"id":"I.5","title":"Catastrophic Malfunctions","part":"I","chunks":[{"k":"p","t":"A catastrophic malfunction is any event, not caused by a player, which immediately ends play for all players on the machine."},{"k":"p","t":"Examples of catastrophic malfunctions include:"},{"k":"li","t":"The game system crashes and/or resets due to a software error or component failure."},{"k":"li","t":"Power is lost or interrupted."},{"k":"li","t":"A new game starts."},{"k":"li","t":"A major malfunction repeatedly recurs in spite of attempts to repair the machine."},{"k":"p","t":"Any event caused by a player, intentionally or unintentionally, including Slam Tilts, is covered under “Player Errors” below."},{"k":"p","t":"When a catastrophic malfunction occurs, if the scores are able to be recorded, players will be provided the appropriate number of additional ball(s) of play on a new game once the machine has been repaired. If the scores are not retrievable, players will be forced to start their game over."},{"k":"p","t":"Tournament Directors may allow the player to play ball 3 or 5 of the new game, if that player has been denied certain features that are freely awarded by the machine. Examples of this include ‘Double Bonus’ balls on many EM machines, as well as pity Mist Multiball on Dracula should the player have not yet played one. The player’s total score on the additional ball of play will be added to their previous score, and the new game will be terminated. Tournament Directors will NEVER attempt to re-establish the state of any game features at the time of the Major or Catastrophic Malfunction."},{"k":"p","t":"If a machine affected by catastrophic malfunction cannot be repaired in order to continue play, it is considered disabled; please see “Disabled Machines”."}]},{"id":"I.6","title":"Beneficial Malfunctions","part":"I","chunks":[{"k":"p","t":"Any malfunction which provides at least one player with a significant advantage over any other player competing on that machine is known as a beneficial malfunction. Tournament Officials shall determine what constitutes a significant advantage."},{"k":"p","t":"Any beneficial malfunction which results in a player being able to continue play of a ball that normally should have ended is allowed once per game. Examples of this would include: an unexpected software ball save or a ball that comes to rest on an unlit kickback in the outlane (which will lead to a ball search, kicking the ball back into play). Any such behavior shall not be allowed if it repeats, meaning that Tournament Officials may require players to allow the repeatedly-saved ball to drain, or play on the machine may be terminated in accordance with catastrophic malfunction rules, at which point repairs may be attempted."},{"k":"p","t":"For situations where a ball goes through the drain trough area without triggering the trough switch, and is spit out into the plunger lane as the same ‘ball in play’, the ball will be immediately placed in the drain. This mostly occurs in EM machines, and early Williams Solid State machines. For situations where the playfield isn’t yet valid (typically this is a minimum switch count or some sort of scoring having been made), players will be allowed to continue play as normal. Please contact a Tournament Director immediately should this situation arise."},{"k":"p","t":"Any beneficial malfunction which provides one or more players with a significant scoring or strategic advantage in a way that is not part of normal gameplay will void the score of the affected player(s), unless all immediately-affected players and Tournament Officials can agree on a suitable adjustment of the score or other elimination of the advantage. If the beneficial malfunction has been specifically avoided by the player, it is unlikely that a penalty is necessary. If any player score(s) are voided, the affected player(s) may then replay the game after the other players have finished, and the new score(s) are used for the affected player(s)."},{"k":"p","t":"Examples of beneficial malfunctions would include:"},{"k":"li","t":"A jackpot switch that registers when a different target is hit"},{"k":"li","t":"A valuable switch that scores once without the ball contacting it"},{"k":"p","t":"See also “Stuck Balls”, below."},{"k":"p","t":"Any situation which indicates the presence of a beneficial malfunction should be brought to the attention of the Scorekeeper promptly, who will alert Tournament Officials. Any player who intentionally takes advantage of a significant beneficial malfunction may be given a warning and/or have their affected ticket interrupted and disqualified by Tournament Officials."}]},{"id":"I.7","title":"Stuck Balls","part":"I","chunks":[{"k":"p","t":"During the course of play, it is possible for one or more balls to become stuck on a playfield feature, usually after becoming airborne. If this happens during single ball play, the player must wait for three automatic ball searches to occur. At the discretion of the Tournament Director, the forcing of a ball search to be triggered can be waived. This is for situations where inducing a ball search has adverse effects on the current game state. The expiration of any timed feature during this period is not considered a malfunction."},{"k":"p","t":"If the stuck ball has not been freed after three such searches, or if the machine is not performing searches for some reason, the player must alert the Scorekeeper, and a Tournament Official will be brought to the machine. The player must remain alert and at the machine, as they are responsible for the ball if it becomes freed at any point. Where possible, machines will be configured with “chase” features disabled, so that additional balls will not be released into play as a result of ball searches. However, in the event this occurs, the player is responsible for continuing play, and a suitable malfunction will only be ruled if the machine is unable to function normally from this point forward."},{"k":"p","t":"A Tournament Official may initially choose to try to free the stuck ball through judicious nudging, tapping, etc. The player must remain ready to resume play at the machine during this attempt. If actions by the Official result in a Tilt, this will be treated as a major malfunction (not the fault of the player). If the Official frees the ball but the player does not successfully continue play, this is normal play (the fault of the player). Loss of Tilt warnings due to Tournament Official nudging is considered normal play."},{"k":"p","t":"If the Tournament Official is unable to free the stuck ball, the machine will be opened, and the stuck ball freed and placed either in the plunger lane, or on the upraised flipper of the Tournament Directors choosing, with the flipper button held by the player. In the event this is not possible, the Official may select another location or feature where the ball can be placed safely while the machine is being closed in order to resume normal play."},{"k":"p","t":"If more than one ball is stuck, all freed balls will be placed on the flipper(s) of the Tournament Director’s choice before play resumes, or in the plunger lane if the flippers are inactive while the machine is open."},{"k":"p","t":"If the ball is inadvertently freed while the machine is open and drains without the player regaining complete control (stopped on a flipper), this will be treated as a major malfunction. If the machine cannot be opened successfully, or if opening or closing the machine terminates the game(s) in progress for any reason, this will be treated as a catastrophic malfunction. If the ball is freed and the machine closed without the player’s loss of ball, play continues as normal. If the game is in multiball play and one or more balls are lost as a result of freeing stuck balls, possibly ending multiball but not ending the ball in play, this will be considered no worse than a minor malfunction. If any feature or mode that is lit or active times out while one or more balls are stuck, this will not be considered a malfunction. Any points scored by the Tournament Official in the process of freeing stuck balls will not be counted. These points should be subtracted from the final score of the player. It is recommended that Tournament Officials record the scores of all players prior to opening the machine to free the stuck ball."},{"k":"p","t":"Any player who chooses to shake or bump the machine in order to free a stuck ball does so at their own risk. No allowance will be made for a player who tilts while attempting to free a stuck ball, whether or not Tournament Officials are present."},{"k":"p","t":"If a ball becomes stuck during a multiball mode, the player should attempt to trap the other ball(s) in play and request assistance. A stuck ball during multiball often represents a significant beneficial malfunction, and intentionally taking advantage may result in a penalty. Please note specifically that a ball ending up in the plunger lane during multiball on a machine where there is no autoplunger (or where the autoplunger for some reason refuses to fire) counts as a stuck ball, and the ball must be plunged by the player. See “Beneficial Malfunctions” for further details."},{"k":"p","t":"Any player who misuses a game feature in order to intentionally trap a ball during a multiball mode, such as holding in the plunger on Tommy in order to defeat the autoplunger, may be given a warning and/or have their affected game disqualified by Tournament Officials. Please note that intentionally causing ball searches is also prohibited (see “Delay” under “Player Conduct”)."},{"k":"p","t":"In situations where a ball is trapped in a way that it can be released through player action other than shaking or bumping – for example, a ball at rest underneath a flipper or any other mechanism which the player controls – this is not deemed to be a stuck ball. Balls trapped in this fashion during multiball modes are not generally considered to be a rules violation, although the ruling will depend on the exact machine and situation."},{"k":"p","t":"Any ball that comes to rest in an outlane, where any portion of the ball is below the outlane post, is not deemed a stuck ball. In these instances, players will have the option of attempting to free the ball themselves or to ask a Tournament Official to manually trigger the outlane switch and drain the ball for them. Please note that when this happens in multiball, in no way will a player be allowed to take advantage of this situation by continuing to play any other balls currently available. The situation of this ball that has come to rest needs to be dealt with immediately by either the player or tournament director. Also, please note that any ball coming to rest on the apron is considered as having come to rest in the outlane and should be treated as such."},{"k":"p","t":"A ball which has come to rest on top of a center post, an inlane-outlane post/guide or a lamp insert/playfield divot directly above an outlane will not be considered a stuck ball. Players may choose to free balls resting in these positions through nudging of the machine, or request that an Official end the ball in play by manually placing it in the drain for center post incidents, and the outlane for inlane-outlane incidents. If an automatically-triggered kickback exists that will send the ball back into play upon draining it in the appropriate outlane, that feature will be manually triggered, and the ball will be treated as a stuck ball from that point and placed on a flipper or other suitable location. Player-controlled kickback features, such as mini-flippers, posts, or manually-controlled kickbacks that send the ball back into play, do not count toward establishing stuck ball status in this case, and the player will not be permitted to utilize these features or touch the game until the ball has reached the ball trough. If the ball is stuck on any playfield element that is located between the flippers, the ball will be considered a stuck ball if there is no chance of a drain from the ball rolling off of its resting place."},{"k":"p","t":"If, during multiball, a ball comes to rest in an outlane or on top of a center post, inlane-outlane post/guide, or directly above an outlane, in no way will a player be allowed to take advantage of this situation by continuing to play any other balls currently available. This situation must be dealt with immediately by either the player or a Tournament Official. The player must attempt to free a ball resting in these positions, or request that an Official place the ball in the drain or outlane."},{"k":"p","t":"In multiball, some games offer the opportunity to stick a ball in an area that can only be freed if the player uses another ball to free it. Examples include getting a ball stuck behind a visor on games including Attack From Mars, Jackbot and Spider-Man. The ruling in this situation is based on whether the game has software written into it to specifically address the mode or situation. On Attack from Mars and Jack*Bot, the Dirty Pool rule is specifically written for that situation. In these cases the ball behind the visor would NOT be considered stuck and players would continue to play on. On Spider-Man however, since there is no game rule written for that situation, this would be considered a stuck ball and the player should attempt to trap the other ball(s) in play and request assistance."},{"k":"p","t":"For any balls stuck in multiball play, no attempts should be made by the player to continue shooting shots around the playfield trying to free the stuck ball. The stuck ball has to be dealt with under the rules above. Any loss of the multiball due to freeing the stuck ball(s) will not be considered a Major Malfunction."}]},{"id":"I.8","title":"Disabled Machines","part":"I","chunks":[{"k":"p","t":"Any tournament machine that breaks down during play will be attended to by technicians as promptly as possible. In the event that a breakdown is severe and cannot be repaired promptly, the machine may be taken out of service temporarily or permanently. A permanently disabled machine may be replaced with a substitute by a Tournament Official. If the failed machine is eventually repaired, it will be put back into play."},{"k":"p","t":"In the event that any players completed their game before the machine became disabled, and their finishing position on that game has been determined, that finishing position will stand and that player will not participate on the substitute machine. The remaining players will then play off on the substitute machine to determine the remaining finishing positions that were not able to be determined on the original machine."},{"k":"p","t":"Scores will be kept on a disabled machine if the tournament is greater than 50% through the designated qualifying time period. If the tournament is less than 50% through the designated qualifying time period, all scores will be considered void. In the event all scores on a machine are considered void, players will be compensated with the appropriate number of replacement tickets relative to their specific number of entries on the disabled machine. In the event the tournament software is not able to track the specific number of tickets each player should be refunded, they will each be given one replacement ticket."}]},{"id":"I.9","title":"Player Errors","part":"I","chunks":[{"k":"p","t":"A player error is any player action, purposeful or accidental, which affects the normal play or outcome of a game in progress."},{"k":"p","t":"Any player who tilts their ball in play will not receive any penalty other than the normal loss of ball. Note that some older machines may penalize the player with loss of game; this is equivalent to tilting all remaining balls in order. Abuse of machines is covered under “Player Conduct”. Any player who tilts the ball of another player will receive a score of zero for that game, unless Tournament Officials grant an exception based on the behavior of the machine in question."},{"k":"p","t":"Any player who tilts their own ball, which then results in a tilt warning given to the following player will not have any consequences for the first offense. The player with the warning will be allowed to continue play as normal, or choose to have the ball played on a fresh game. Please note that games that allow for an additional ball to be added to the current game in progress, or for tilt warnings to be removed by a software adjustment, this solution will be used. A second offense by the same player anytime throughout the tournament will be treated as a tilt of another player’s ball, with the rules from the previous paragraph being enforced."},{"k":"p","t":"Any player who slam tilts a machine, thereby ending play for all players, will receive a score of zero for that game. The slam tilt is treated as a catastrophic malfunction for any other player(s) who have not completed their game(s) in progress. If a Tournament Official rules that the slam tilt sensor is not functioning properly, the slam tilt will be treated as a catastrophic malfunction for all players."},{"k":"p","t":"Any player who deliberately tilts or slam tilts a machine in order to derive some benefit to their own play, or the play of others, under these rules, will receive a score of zero. Repeated offenses may result in ejection from the tournament."},{"k":"p","t":"Any player who moves a game to the point it slides off of a rubber foot beneath the game’s leg will be given a score of zero for the game. This is determined based on any portion of the leg leveler being in physical contact with the ground. A Tournament Director will then attempt to put the game back onto the rubber foot. If successful, the game will continue. If a tilt-through occurs, the appropriate tilt-through procedure will be followed. Should this happen to the last player on the last ball of the game, the same rules will be enforced, with a score of zero being given to that player."},{"k":"p","t":"Any player who deliberately interferes with the play of another player, through distraction, touching the machine or player, or disrupting tournament procedures, will receive a score of zero for the game. Any repeated offense under this rule will result in ejection of the player from the tournament. Any non-player, or tournament participant not playing in the game in progress, who deliberately interferes with the play of any tournament game, will be ejected from the facility."},{"k":"p","t":"Accidental interference is regrettable but can happen. Any player or non-player who accidentally interferes with the play of any tournament game will be warned. If the interference was sufficient to cause the loss of ball, this will be treated as a major malfunction. If the interference terminated play for all players (for example, tripping over a power cord and pulling it from the wall), this will be treated as a catastrophic malfunction."},{"k":"p","t":"In any multiplayer match on any machine, it is the equal responsibility of ALL players involved in the match to ensure that the correct number of players are started. If a game is started with the incorrect number of players, anything that occurs within that game is considered void, with no penalty to any player. At no time may players be added to the game once player 1 has plunged their ball into play. At no time may player 1 finish their game as a single-player. The game must be restarted from scratch, with the correct number of players started. Players may always ask a Scorekeeper or Tournament Official to instead start the game in any final round. If the Scorekeeper or Official makes a mistake, the game will be terminated and restarted, with no penalty to any player. There will be no compensation or adjustment of scores or game state at any time."},{"k":"p","t":"A player who plays out of turn in a multiplayer game will receive a game score of zero. The affected player may choose to take over the ball in play, if possible, or they may choose to have the incident treated as a major malfunction. In the event the player takes over, they shall be deemed “in control” after declaring their intent, taking their position at the table, and making contact with the ball via the flippers. The affected player may not change their mind once they are “in control”. Any player who plays out of turn deliberately in order to employ this rule will be disqualified. Points scored when a ball is being played out of turn will count if the exact score for this player was unknown prior to the incident. Please note this rule should also be used for games accidentally advancing to the next player position without properly ending the previous ball in play."},{"k":"p","t":"If a player does get disqualified from a game, their position in the game is considered open. Any interference caused by player error (for example, tilt throughs or accidentally playing out of turn) in that position will have no additional consequences to the offending player. Any activity played in that open position will be considered void."},{"k":"p","t":"For certain tournament machines, only players 1 and 3 will be used to help prevent tilt throughs. It is the equal responsibility of ALL players involved in the match to ensure that players do not accidentally play in the player 2 and 4 positions. If a player accidentally does play in position 2 or 4, anything that occurs within that ball is considered void, with no penalty to any player. Players must play their proper ball in the correct player slot."},{"k":"p","t":"In qualifying rounds, any player who starts a multiplayer game will only be allowed to complete the “player one” game, regardless of when they noticed the error. Any player who restarts a qualifying game, rather than completing it and allowing it to be recorded, will have that ticket disqualified. Repeated offenses will lead to ejection from the tournament."},{"k":"p","t":"Coaching of any player while the player is at the machine is not allowed and may lead to sanctions, such as removing the coach from the area, voiding the player’s game in progress, or issuing a yellow or red card. Spectators and other players must refrain from commenting on play in a way that affects the current game."},{"k":"p","t":"If a player specifically requests advice on a game feature during play, their question may be addressed only by a Tournament Official, and answered only in terms of whether or not the machine is functioning correctly. Informing player 1 too many or too few games have been entered into the machine will not be penalized as coaching."},{"k":"p","t":"In mini-tournament events which feature team play, players on a team may freely discuss game features and strategy without penalty."},{"k":"p","t":"No player may use a camera or visual aid of any kind, other than the instructions provided by the machine, while standing at the machine. A player may review electronic or written notes in between turns of a multiplayer game or between games, but not during their own turn or between balls of a single-player game."},{"k":"p","t":"Applying physical force to a machine in order to derive a benefit from the activation of a switch, stuck ball, or other other scoring feature shall only be permitted if the benefit cannot be repeated continuously as determined by a Tournament Director. Nudging a machine so a locked ball moves and registers a switch causing a ball save, or nudging in order to manipulate a feature to begin a multiball would be permissible. Examples include:"},{"k":"li","t":"Shaking Bram Stoker’s Dracula such that the mist ball falls from its magnet starting multiball"},{"k":"li","t":"Shaking Avatar when a ball is in the Link assembly causing it to register"},{"k":"li","t":"Shaking The Walking Dead causing the Well Walker to register a hit."},{"k":"p","t":"Applying physical force to a machine, or using any other means, to manipulate staged and/or locked balls in an attempt (successful or not) to avoid having a drained ball(s) be recognized shall not be permitted. Examples include:"},{"k":"li","t":"Shaking Bram Stoker’s Dracula as a ball is draining such that a staged mist ball falls out of that staging area when Mist Multiball was not properly started."},{"k":"li","t":"Shaking Game of Thrones as a ball is draining while balls are locked in the sword lock assembly."},{"k":"li","t":"Shaking Lord of the Rings as a ball is draining such that a locked ball falls out of the sword lock assembly."},{"k":"p","t":"Shaking a machine repeatedly in order to derive a continual benefit from a loose switch or stuck ball is not permitted. For example, shaking Champion Pub such that the boxer gives free hits over and over allowing the player to score continually is not allowed. Any player who intentionally takes advantage of a significant beneficial malfunction may be given a warning and/or have their affected game interrupted and disqualified by Tournament Officials."},{"k":"p","t":"Tournament Officials will be the sole determiners of what constitutes interference and whether or not it is accidental or deliberate. Scorekeepers are strongly encouraged to watch for and, if possible, prevent incidents of interference."}]},{"id":"I.10","title":"Disqualifications","part":"I","chunks":[{"k":"p","t":"Any player disqualified from a game for any reason will cease play on that game immediately and will receive a game score of 0."}]},{"id":"I.11","title":"Rulings","part":"I","chunks":[{"k":"p","t":"Rulings shall be made by Tournament Officials, which includes Event Coordinators and any person(s) designated as Officials by the Coordinators. Designated Officials may have restrictions on the breadth of rulings, and may be overridden by Tournament Officials. Any designated Official or Event Coordinator is excluded from ruling on any play situation that directly affects their actual or potential standing as a player. Such persons may also be recused where their decision affects a close friend or family member, at the discretion of other tournament Officials."},{"k":"p","t":"Final authority for any ruling, including rulings that contradict or vacate anything written in this document or in other IFPA/PAPA materials, rests with PAPA/IFPA Management."},{"k":"p","t":"IFPA/PAPA accepts all feedback and constructive criticism, including player complaints, without reservations. However, please recognize that PAPA/IFPA strives to be fair even in the most difficult situations. Complaints will be taken seriously, ruled upon, and considered resolved. There is to be no whining."}]},{"id":"II.1","title":"Software Settings","part":"II","chunks":[{"k":"p","t":"In general, the software settings of each machine will be adjusted to best accommodate tournament play. The following settings will be employed on any machine that supports them:"},{"k":"li","t":"Tournament Mode"},{"k":"li","t":"Free Play"},{"k":"li","t":"3 Balls"},{"k":"li","t":"Extra Balls disabled"},{"k":"li","t":"Buy-In or Continues disabled"},{"k":"li","t":"Game Restart disabled"},{"k":"li","t":"2 Tilt Warnings (may be 0 on older machines)"},{"k":"li","t":"Flipper AutoLaunch disabled"},{"k":"li","t":"Timed AutoLaunch disabled"},{"k":"li","t":"Standard Factory Settings for Ball Savers, Difficulty, Timers, etc"},{"k":"li","t":"Specific Difficulty Settings as determined by Tournament Officials"},{"k":"li","t":"Automatic Reflexing Features disabled"},{"k":"li","t":"Replays disabled (no score or Extra Ball awarded)"},{"k":"p","t":"These settings may vary according to division, at the discretion of Tournament Officials."},{"k":"p","t":"Please note that older machines, such as commonly used in the Classics Divisions, may have different settings, such as allowable extra balls, five-ball play, or a Tilt penalty of “entire game” rather than “current ball”."}]},{"id":"II.2","title":"Hardware Settings","part":"II","chunks":[{"k":"p","t":"Machines used for tournament play will be prepared and kept in good working order to the greatest extent possible. Each machine will be properly leveled left-to-right and inclined front-to-back."},{"k":"p","t":"Any player with a complaint or question about the hardware setup of a machine should make their inquiry in between games, or in between balls, if urgent."}]},{"id":"II.3","title":"Machine-Specific Settings","part":"II","chunks":[{"k":"p","t":"In order to best suit tournament play, certain machines may be subject to specific settings or rules adjustments, at the discretion of Tournament Officials. These adjustments will be made before tournament play begins, and will be documented if possible. The intent is to eliminate features which can be abused by skilled players, or which arbitrarily extend play time to a degree that would hinder the smooth progress of the tournament."}]},{"id":"III.1","title":"Personal Conduct","part":"III","chunks":[{"k":"p","t":"All players are expected to conduct themselves in a courteous manner and to contribute to a safe and welcoming play environment. This also applies to behaviors that are not related to gameplay."},{"k":"p","t":"The following behaviors are unacceptable tournament conduct. A wide variety of players and observers will be present, including media, and these behaviors do nothing to grow the pinball community or promote pinball as a sport."},{"k":"li","t":"Rudeness toward any Scorekeeper or Tournament Official"},{"k":"li","t":"Outbursts, especially those including indecent language"},{"k":"li","t":"Displays of physical aggression"},{"k":"li","t":"Offensive comments including but not limited to those relating to gender, age, sexual orientation, disability, physical appearance, body size, race, or religion"},{"k":"li","t":"Verbal, physical, or sexual harassment"},{"k":"p","t":"Penalties for unacceptable behavior will include warnings, disqualifications, or ejection from the tournament facility at the sole discretion of the Tournament Director. See Section III.8 (“Penalty Cards”) for additional information."},{"k":"p","t":"Any player who argues a ruling once it has been made will receive a warning. Any player who continues arguing once receiving a warning will receive a score of zero for the game in question, a voided ticket, ejection from the tournament, or ejection from the building, as determined at the sole discretion of the Tournament Director involved."},{"k":"p","t":"Any type of assault, be it physical, sexual, verbal or otherwise, is grounds for immediate ejection from the tournament and facility, and authorities will be contacted. Any express or implied threats or actions of violence are grounds for immediate ejection from the facility, and authorities will be contacted. Other possible grounds for ejection include but are not limited to fraud, theft, illegal activity, public drunkenness, stalking, etc.. Any person ejected from the facility is banned and may not return to the property. Banned persons will be prosecuted for trespass if necessary."},{"k":"p","t":"Tournament Directors reserve the right to ban players indefinitely in cases of egregious player conduct, such as harassment or assault. In making those determinations, Tournament Directors are expected to prioritize a safe and welcoming play environment over the ability of ejected players to return to future events."}]},{"id":"III.2","title":"Abuse of Machines","part":"III","chunks":[{"k":"p","t":"Tilt sensors are employed to determine what constitutes unduly rough handling of each machine, within the parameters of normal play. Abusive handling such as punching, kicking, lifting, tipping, or rocking a machine, or hitting the glass in any way, is grounds for a warning and possible disqualification of game or ejection from the tournament, at the discretion of Tournament Officials."},{"k":"p","t":"Abuse of any other items, including but not limited to streaming equipment, furniture, or personal property is also grounds for warning/disqualification at the discretion of Tournament Officials."}]},{"id":"III.3","title":"Interference, Collusion, and Cheating","part":"III","chunks":[{"k":"p","t":"Any player who intentionally interferes with tournament play or otherwise disrupts the tournament setting will be warned and/or ejected from the tournament, at the discretion of Tournament Officials."},{"k":"p","t":"Any form of cheating, including game restarts, tampering with games, tampering with recorded results, scorekeeper intimidation or collusion, or anything else not covered here, will be addressed by Tournament Officials as appropriate, including disqualification and/or ejection from the tournament."},{"k":"p","t":"Any collaborative effort between players in an attempt to unfairly affect the outcome of the competition, or to “lock out” a third player, or to otherwise refrain from making the best possible competitive effort on each and every game played, will be looked upon very poorly by Tournament Officials, and may result in disciplinary action, including disqualification and/or ejection from the tournament."}]},{"id":"III.4","title":"Intentional Delays","part":"III","chunks":[{"k":"p","t":"No player may delay their game for more than 60 seconds, except to await a ruling or resolution of an environmental inconvenience. Environmental inconvenience is defined as any condition which can reasonably be expected to be resolved quickly, such as unusual noise, lighting problems other than sunlight, or repairs to an immediately adjacent machine. No player may wait for more that 60 seconds from the end of the previous player’s turn to begin their turn. The first violation as witnessed by a Tournament Director will result in a warning. A second violation and all subsequent violations of this rule during a tournament will result in a score of zero on that game for the player."},{"k":"p","t":"Intentional delay is defined as time when the player is intentionally making no progress towards in-game objectives, including but not limited to time during which the ball is left in the plunger lane, held on a flipper, or passed from one flipper to another. Stuck balls do not count as intentional delays. Holding one or more ball(s) while one or more ball(s) remain in play does not count as intentional delay."},{"k":"p","t":"A player may not intentionally cause a ball search in order to activate any feature of the game. A player is permitted to wait a reasonable amount of time, as determined by the Tournament Director, for a tilt mechanism to settle."}]},{"id":"III.5","title":"Absences","part":"III","chunks":[{"k":"p","t":"During qualifying rounds, any player who is absent at the start of the game will have their name announced by the Scorekeeper three times. If the player in question remains absent at that time, the next player in the queue will be moved forward. During final rounds or any qualifying format that involves group play, if a player is absent when it is their turn to play, they will be awarded three minutes to return before the game in question will be recorded as a zero. A second three-minute absence by any player in the final rounds will result in their elimination from the tournament. Any player who has an emergency should notify a Tournament Official so that accommodations may be made. Should a player have to permanently leave the tournament for any reason prior to its conclusion, they will not be permitted to pre-play any games, and all scores for any remaining games will be recorded as zero points."},{"k":"p","t":"Note that an absence at the beginning of final rounds results in the player not being part of the final rounds at all."}]},{"id":"III.6","title":"Death Saves, Bangbacks, etc","part":"III","chunks":[{"k":"p","t":"Techniques known as “Death Saves” and “Bangbacks” are sometimes employed by certain advanced players. Because the effectiveness of these techniques varies from machine to machine, and because of the risk of injury to either player or machine, these techniques are banned from tournament play. In the event that a drained ball bounces back into play without deliberate player action, such as in the case of a “lazarus”, this is considered the mechanical nature of pinball and the ball may be played. If this situation occurs repeatedly, and there is question as to whether the lazarus ball was naturally occurring or induced by the player, Tournament Directors may end the game in progress and award a score of zero."}]},{"id":"III.7","title":"Wagering or Gambling","part":"III","chunks":[{"k":"p","t":"Players are strictly prohibited from placing, soliciting, or facilitating any bet, whether directly or indirectly through a third-party, on any IFPA sanctioned tournament in which they are a participant. This rule extends to Tournament Directors, Scorekeepers and volunteers of that event. This includes betting on game outcome, statistics, score, performance of any individual participant, or any other kind of “proposition bet” on which wagering is offered."},{"k":"p","t":"The penalty for such offenses will be a 1-year suppression of that person from the IFPA World Pinball Player Rankings (WPPR) system, forfeiting their right to any IFPA related perks during the time of suppression. In addition, the IFPA grants full authority to the organizers of the IFPA sanctioned tournament in question to levy any additional penalties as appropriate to the offending person at their discretion."}]},{"id":"III.8","title":"Penalty Cards","part":"III","chunks":[{"k":"p","t":"Similar to soccer, Tournament Directors can officially warn a player that their conduct is not acceptable by issuing them a yellow card. Any additional action which violates the player conduct rules can lead to a red card, and expulsion of the player from the tournament. Similar to other sports, at the discretion of the Tournament Directors, it is possible for players to be issued a red card immediately for their actions depending on how severe the action."}]},{"id":"III.9","title":"Accommodating Disabilities","part":"III","chunks":[{"k":"p","t":"Tournament Officials will make every reasonable attempt to accommodate disabilities. This may also apply to people with temporary disabilities, such as injuries. Players who are not fluent in the local language are allowed to utilize a bilingual assistant in order to understand these rules, official rulings, and so forth."}]},{"id":"IV.1","title":"Special Score Handling","part":"IV","chunks":[{"k":"p","t":"a. Any player who reaches the maximum possible score on a machine that has such, will receive that score as their total. For example, Guns n Roses stops scoring at 9,999,999,990 points."},{"k":"p","t":"b. Any player whose machine “rolls over” to a zero score is responsible for immediately advising the Scorekeeper, both when this is imminent, as well as when it happens. The Scorekeeper will then make a note to record the appropriately increased score. If the player fails to notify the Scorekeeper, they may not receive the increased score."},{"k":"p","t":"c. On the game NBA Fastbreak using basketball-style scoring, each championship ring collected by the player shall cause their recorded score to be increased by 100 points."},{"k":"p","t":"d. When playing an electromechanical machine, players must understand that some score reel skipping or inaccuracies are inevitable over the course of a tournament due to the mechanical nature of the mechanism. If a score reel is not operating properly, players must notify officials immediately. No ruling will be made unless the score reel in question is the highest, or next-to-highest value reel. Tournament Directors reserve the right to adjust scores on electromechanical machines if an obvious error has been made and the integrity of the match in question can be maintained. If the error in question was not witnessed by a Tournament Director, or it did not occur in a way such that an obvious correction can be made, no adjustment will be made and the score shown will stand. In the case of a continuously malfunctioning score reel, Tournament Directors reserve the right to declare a game invalid for the affected player, or for all players involved in the match."},{"k":"p","t":"e. If a player verbally concedes for any reason, the concession will only be considered valid if it is witnessed by a Scorekeeper, Tournament Director, or all members of a group. If a player attempts to use an invalid verbal concession to interfere with an opponent, the issue and resolution will be treated on a case-by-case basis, and the offending player risks receiving a score of zero for the game in question."},{"k":"p","t":"f. Due to the complex and imperfect nature of pinball machines, rare and / or unusual scoring situations may arise that are the unintended consequences of programming oversights, errors, mechanical issues, or wiring issues. If a Tournament Director deems a player is taking advantage of an unexpected scoring situation or an obscure “programming bug”, the Tournament Director reserves the right to warn the player in question to not abuse the situation further, end the game in progress at the current score, award a score of zero, or ask the player to restart the game. The determination of whether a player is taking advantage of a software or scoring issue and the subsequent penalty, if any, is left up to the discretion of the Tournament Director and will be based on the particulars of the specific situation."}]},{"id":"IV.2","title":"Creative Commons License","part":"IV","chunks":[{"k":"p","t":"These IFPA/PAPA Tournament Rules by PAPA.org are licensed under a Creative Commons Attribution-Share Alike 3.0 United States License."},{"k":"p","t":"The intent is that the rules can be adapted and reused, with attribution, with the license preserved."}]}],"topics":[{"group":"Machines","topics":[{"id":"machine-problems","name":"Machine problems","sections":["I.2","I.3","I.5","I.6","I.4","I.7","I.8"]},{"id":"machine-settings","name":"Machine settings","sections":["II.1","II.2","II.3"]}]},{"group":"Players","topics":[{"id":"handling","name":"Player errors","sections":["I.9","III.2","III.6"]},{"id":"time","name":"Delays and absences","sections":["III.4","III.5"]},{"id":"misconduct","name":"Misconduct and penalties","sections":["III.1","III.3","III.7","III.8","I.10"]}]},{"group":"Officials","topics":[{"id":"td-decides","name":"Where TDs decide","sections":["I.1","I.2","I.4","I.6","I.7","I.9","I.11","III.1","III.2","III.3","III.4","III.7","III.8","III.9","IV.1"]}]}],"glossary":[{"id":"minor-malfunction","term":"Minor malfunction","aliases":["minor malfunction","minor malfunctions"],"kind":"rules","from":"I.2","text":"A minor malfunction is any incident without external cause which deviates from the normal course of gameplay, without directly causing a player’s loss of turn and without providing any player a significant advantage over others. A minor malfunction is considered part of normal play."},{"id":"major-malfunction","term":"Major malfunction","aliases":["major malfunction","major malfunctions"],"kind":"rules","from":"I.3","text":"A major malfunction is a gameplay problem with a machine that results in the premature loss of ball in play in a fashion that is not a normal feature of the machine’s gameplay."},{"id":"catastrophic-malfunction","term":"Catastrophic malfunction","aliases":["catastrophic malfunction","catastrophic malfunctions"],"kind":"rules","from":"I.5","text":"A catastrophic malfunction is any event, not caused by a player, which immediately ends play for all players on the machine."},{"id":"beneficial-malfunction","term":"Beneficial malfunction","aliases":["beneficial malfunction","beneficial malfunctions"],"kind":"rules","from":"I.6","text":"Any malfunction which provides at least one player with a significant advantage over any other player competing on that machine is known as a beneficial malfunction."},{"id":"known-malfunction","term":"Known malfunction","aliases":["known malfunction","known malfunctions","posted malfunction"],"kind":"rules","from":"I.4","text":"Any malfunction or unusual behavior that is determined to be relatively minor but unusual enough to merit comment may, at the discretion of Tournament Officials, be posted for players to be aware of before playing the affected machine."},{"id":"player-error","term":"Player error","aliases":["player error","player errors"],"kind":"rules","from":"I.9","text":"A player error is any player action, purposeful or accidental, which affects the normal play or outcome of a game in progress."},{"id":"intentional-delay","term":"Intentional delay","aliases":["intentional delay","intentional delays"],"kind":"rules","from":"III.4","text":"Intentional delay is defined as time when the player is intentionally making no progress towards in-game objectives, including but not limited to time during which the ball is left in the plunger lane, held on a flipper, or passed from one flipper to another."},{"id":"environmental-inconvenience","term":"Environmental inconvenience","aliases":["environmental inconvenience"],"kind":"rules","from":"III.4","text":"Environmental inconvenience is defined as any condition which can reasonably be expected to be resolved quickly, such as unusual noise, lighting problems other than sunlight, or repairs to an immediately adjacent machine."},{"id":"death-save","term":"Death save","aliases":["death save","death saves"],"kind":"rules","from":"III.6","text":"Techniques known as “Death Saves” and “Bangbacks” are sometimes employed by certain advanced players. Because the effectiveness of these techniques varies from machine to machine, and because of the risk of injury to either player or machine, these techniques are banned from tournament play."},{"id":"bangback","term":"Bangback","aliases":["bangback","bangbacks"],"kind":"rules","from":"III.6","text":"Techniques known as “Death Saves” and “Bangbacks” are sometimes employed by certain advanced players. Because the effectiveness of these techniques varies from machine to machine, and because of the risk of injury to either player or machine, these techniques are banned from tournament play."},{"id":"lazarus","term":"Lazarus","aliases":["lazarus"],"kind":"rules","from":"III.6","text":"In the event that a drained ball bounces back into play without deliberate player action, such as in the case of a “lazarus”, this is considered the mechanical nature of pinball and the ball may be played."},{"id":"yellow-card","term":"Yellow card","aliases":["yellow card","penalty card","penalty cards"],"kind":"rules","from":"III.8","text":"Similar to soccer, Tournament Directors can officially warn a player that their conduct is not acceptable by issuing them a yellow card."},{"id":"red-card","term":"Red card","aliases":["red card"],"kind":"rules","from":"III.8","text":"Any additional action which violates the player conduct rules can lead to a red card, and expulsion of the player from the tournament."},{"id":"tournament-official","term":"Tournament Official","aliases":["tournament official","tournament officials"],"kind":"rules","from":"I.11","text":"Rulings shall be made by Tournament Officials, which includes Event Coordinators and any person(s) designated as Officials by the Coordinators."},{"id":"tilt","term":"Tilt","aliases":["tilt","tilted","tilts"],"kind":"common","meaning":"The machine ends your ball early because it sensed too much movement."},{"id":"tilt-warning","term":"Tilt warning","aliases":["tilt warning","tilt warnings","danger"],"kind":"common","meaning":"A warning the machine gives for rough movement before it tilts. Many machines show it as “Danger”."},{"id":"slam-tilt","term":"Slam tilt","aliases":["slam tilt"],"kind":"common","meaning":"A tilt from the slam switch, set off by a hard hit or lift of the cabinet. On most machines it ends the whole game, not just the ball."},{"id":"nudge","term":"Nudge","aliases":["nudge","nudging","nudged"],"kind":"common","meaning":"Moving the machine with your hands to steer the ball."},{"id":"ball-save","term":"Ball save","aliases":["ball save"],"kind":"common","meaning":"A short window, or a feature, that gives you the ball back if it drains."},{"id":"multiball","term":"Multiball","aliases":["multiball","multi-ball"],"kind":"common","meaning":"Two or more balls in play at once."},{"id":"drain","term":"Drain","aliases":["drain","drains","drained"],"kind":"common","meaning":"The ball falls out of play at the bottom of the playfield."},{"id":"outlane","term":"Outlane","aliases":["outlane","outlanes"],"kind":"common","meaning":"The lane beside a flipper that leads the ball to drain."},{"id":"ball-search","term":"Ball search","aliases":["ball search","ball searches"],"kind":"common","meaning":"The machine’s routine to find a ball it can’t detect, which starts after a wait."},{"id":"plunger","term":"Plunger","aliases":["plunger"],"kind":"common","meaning":"The spring rod, or button, that launches the ball."},{"id":"free-play","term":"Free play","aliases":["free play"],"kind":"common","meaning":"The machine plays without coins."},{"id":"extra-ball","term":"Extra ball","aliases":["extra ball","extra balls"],"kind":"common","meaning":"A bonus ball awarded during a game."},{"id":"tournament-director","term":"Tournament Director","aliases":["tournament director","tournament directors","td"],"kind":"common","meaning":"The person running the event."},{"id":"scorekeeper","term":"Scorekeeper","aliases":["scorekeeper","scorekeepers"],"kind":"common","meaning":"The person recording scores."},{"id":"apron","term":"Apron","aliases":["apron"],"kind":"common","meaning":"The panel across the bottom of the playfield, below the flippers, that holds the instruction card and guides the ball to the drain."},{"id":"kickback","term":"Kickback","aliases":["kickback","kickbacks"],"kind":"common","meaning":"A feature in the outlane that kicks a drained ball back into play. Some are player-controlled."},{"id":"inlane","term":"Inlane","aliases":["inlane","inlanes"],"kind":"common","meaning":"The lane beside a flipper that feeds the ball onto it."},{"id":"lock","term":"Lock","aliases":["lock","locked","locks"],"kind":"common","meaning":"A feature that holds a ball so more balls can be played together. A held ball is a locked ball."},{"id":"staging","term":"Staging","aliases":["staging","staged"],"kind":"common","meaning":"Holding a ball ready at a spot on the playfield before a multiball or mode starts. A held ball is a staged ball."},{"id":"bonus","term":"Bonus","aliases":["bonus"],"kind":"common","meaning":"Points added at the end of a ball for what the player did during it."},{"id":"buy-in","term":"Buy-in","aliases":["buy-in","buy in","continues"],"kind":"common","meaning":"An option that lets a player extend a game after the last ball."},{"id":"ramp","term":"Ramp","aliases":["ramp","ramps"],"kind":"common","meaning":"A raised track the ball rolls up and along on the playfield."},{"id":"jackpot","term":"Jackpot","aliases":["jackpot","jackpots"],"kind":"common","meaning":"A large scoring award, often in a mode or multiball."},{"id":"playfield","term":"Playfield","aliases":["playfield"],"kind":"common","meaning":"The sloped surface the ball moves across."},{"id":"mode","term":"Mode","aliases":["mode","modes"],"kind":"common","meaning":"A period of play in which the rules change and special shots become available."},{"id":"ball-in-play","term":"Ball in play","aliases":["ball in play"],"kind":"common","meaning":"The ball a player is currently playing, from launch until it drains."}],"cheatsheet":[{"id":"a-ball-is-stuck","situation":"A ball is stuck","items":[{"from":"I.7","text":"If this happens during single ball play, the player must wait for three automatic ball searches to occur."},{"from":"I.7","text":"If the stuck ball has not been freed after three such searches, or if the machine is not performing searches for some reason, the player must alert the Scorekeeper, and a Tournament Official will be brought to the machine."},{"from":"I.7","text":"If a ball becomes stuck during a multiball mode, the player should attempt to trap the other ball(s) in play and request assistance."}]},{"id":"a-feature-doesnt-work","situation":"A feature doesn't work","items":[{"from":"I.3","text":"Loss of any lit feature, running mode, or other gameplay specifics, shall not be considered a major malfunction."},{"from":"I.2","text":"A minor malfunction is considered part of normal play."}]},{"id":"a-flipper-stuck-or-didnt-engage","situation":"A flipper stuck or didn't engage","items":[{"from":"I.2","text":"A minor malfunction is any incident without external cause which deviates from the normal course of gameplay, without directly causing a player’s loss of turn and without providing any player a significant advantage over others. A minor malfunction is considered part of normal play. Tournament Officials shall determine what constitutes a significant advantage; in the event that such an advantage is obtained, refer to “Beneficial Malfunctions”."},{"from":"I.2","text":"A minor malfunction that occurs repeatedly, to the extent that it is markedly affecting play of the machine, may be considered a major malfunction at the sole discretion of Tournament Officials. If a player receives a tilt warning caused inadvertently by another player’s action, please see the “Player Errors” section for how that situation will be handled."},{"from":"I.3","text":"A major malfunction is a gameplay problem with a machine that results in the premature loss of ball in play in a fashion that is not a normal feature of the machine’s gameplay. These may be unusual one-time events, or they may indicate a recurring problem that will need to be addressed by technicians."},{"from":"I.3","text":"A flipper or other major playfield feature ceases to function."},{"from":"I.3","text":"Should a player lose a ball due to a flipper not engaging when the flipper button is pressed, or due to a flipper sticking in the held position when the flipper button is pressed, they should immediately notify a Tournament Official."},{"from":"I.3","text":"If the Tournament Official is able to recreate the problem, this will be treated as a Major Malfunction."},{"from":"I.3","text":"If the problem is not able to be recreated, this will not be treated as a Major Malfunction and play will continue."},{"from":"I.3","text":"If the game is in multiball play and one or more balls are lost as a result of this kind of issue, possibly ending multiball but not ending the ball in play, this will be considered no worse than a minor malfunction."}]},{"id":"a-malfunction-gave-a-player-an-advantage","situation":"A malfunction gave a player an advantage","items":[{"from":"I.6","text":"Any malfunction which provides at least one player with a significant advantage over any other player competing on that machine is known as a beneficial malfunction."},{"from":"I.6","text":"Any beneficial malfunction which provides one or more players with a significant scoring or strategic advantage in a way that is not part of normal gameplay will void the score of the affected player(s), unless all immediately-affected players and Tournament Officials can agree on a suitable adjustment of the score or other elimination of the advantage."}]},{"id":"a-machine-broke-down","situation":"A machine broke down","items":[{"from":"I.8","text":"Any tournament machine that breaks down during play will be attended to by technicians as promptly as possible."},{"from":"I.8","text":"In the event that a breakdown is severe and cannot be repaired promptly, the machine may be taken out of service temporarily or permanently. A permanently disabled machine may be replaced with a substitute by a Tournament Official."},{"from":"I.8","text":"If the failed machine is eventually repaired, it will be put back into play."},{"from":"I.8","text":"Scores will be kept on a disabled machine if the tournament is greater than 50% through the designated qualifying time period. If the tournament is less than 50% through the designated qualifying time period, all scores will be considered void."}]},{"id":"the-machine-crashed-or-reset","situation":"The machine crashed or reset","items":[{"from":"I.5","text":"The game system crashes and/or resets due to a software error or component failure."},{"from":"I.5","text":"A catastrophic malfunction is any event, not caused by a player, which immediately ends play for all players on the machine."},{"from":"I.5","text":"When a catastrophic malfunction occurs, if the scores are able to be recorded, players will be provided the appropriate number of additional ball(s) of play on a new game once the machine has been repaired. If the scores are not retrievable, players will be forced to start their game over."}]},{"id":"a-player-is-absent-when-called","situation":"A player is absent when called","items":[{"from":"III.5","text":"During qualifying rounds, any player who is absent at the start of the game will have their name announced by the Scorekeeper three times. If the player in question remains absent at that time, the next player in the queue will be moved forward."},{"from":"III.5","text":"During final rounds or any qualifying format that involves group play, if a player is absent when it is their turn to play, they will be awarded three minutes to return before the game in question will be recorded as a zero. A second three-minute absence by any player in the final rounds will result in their elimination from the tournament."}]},{"id":"a-player-is-interfered-with","situation":"A player is interfered with","items":[{"from":"I.9","text":"Any player who deliberately interferes with the play of another player, through distraction, touching the machine or player, or disrupting tournament procedures, will receive a score of zero for the game. Any repeated offense under this rule will result in ejection of the player from the tournament. Any non-player, or tournament participant not playing in the game in progress, who deliberately interferes with the play of any tournament game, will be ejected from the facility."},{"from":"I.9","text":"Accidental interference is regrettable but can happen. Any player or non-player who accidentally interferes with the play of any tournament game will be warned. If the interference was sufficient to cause the loss of ball, this will be treated as a major malfunction. If the interference terminated play for all players (for example, tripping over a power cord and pulling it from the wall), this will be treated as a catastrophic malfunction."},{"from":"I.9","text":"Tournament Officials will be the sole determiners of what constitutes interference and whether or not it is accidental or deliberate. Scorekeepers are strongly encouraged to watch for and, if possible, prevent incidents of interference."}]},{"id":"coaching-or-visual-aids-at-the-machine","situation":"Coaching or visual aids at the machine","items":[{"from":"I.9","text":"Coaching of any player while the player is at the machine is not allowed and may lead to sanctions, such as removing the coach from the area, voiding the player’s game in progress, or issuing a yellow or red card. Spectators and other players must refrain from commenting on play in a way that affects the current game."},{"from":"I.9","text":"If a player specifically requests advice on a game feature during play, their question may be addressed only by a Tournament Official, and answered only in terms of whether or not the machine is functioning correctly. Informing player 1 too many or too few games have been entered into the machine will not be penalized as coaching."},{"from":"I.9","text":"No player may use a camera or visual aid of any kind, other than the instructions provided by the machine, while standing at the machine. A player may review electronic or written notes in between turns of a multiplayer game or between games, but not during their own turn or between balls of a single-player game."}]},{"id":"a-player-disputes-a-call","situation":"A player disputes a call","items":[{"from":"I.11","text":"Rulings shall be made by Tournament Officials, which includes Event Coordinators and any person(s) designated as Officials by the Coordinators. Designated Officials may have restrictions on the breadth of rulings, and may be overridden by Tournament Officials. Any designated Official or Event Coordinator is excluded from ruling on any play situation that directly affects their actual or potential standing as a player. Such persons may also be recused where their decision affects a close friend or family member, at the discretion of other tournament Officials."},{"from":"I.11","text":"Final authority for any ruling, including rulings that contradict or vacate anything written in this document or in other IFPA/PAPA materials, rests with PAPA/IFPA Management."},{"from":"I.11","text":"IFPA/PAPA accepts all feedback and constructive criticism, including player complaints, without reservations. However, please recognize that PAPA/IFPA strives to be fair even in the most difficult situations. Complaints will be taken seriously, ruled upon, and considered resolved. There is to be no whining."}]}],"seealso":{"I.2":["I.3","I.6","I.9"],"I.3":["I.2","I.5","I.9"],"I.4":["I.2","I.3"],"I.5":["I.3","I.8","I.9"],"I.6":["I.5","I.7","I.10"],"I.7":["I.2","I.3","I.5","I.6","I.10"],"I.9":["I.3","I.5","I.6","I.7","I.10","III.2"],"II.1":["III.9"],"III.1":["I.10","III.8"],"III.2":["I.10"],"III.3":["I.10"],"III.4":["I.7"],"III.5":["III.9"]},"footer":"<p>Rules text: <em>PAPA/IFPA Complete Competition Rules<\/em> version 2025.08.10 by PAPA.org licensed under <a href=\"https://creativecommons.org/licenses/by-sa/3.0/us/\">CC BY-SA 3.0 US<\/a>. Not an official IFPA or PAPA product. Everything runs on your device with no AI. <a href=\"#a\">Acknowledgements<\/a><\/p>","ack":"<h2 class=\"label\">Rules text<\/h2><p><em>PAPA/IFPA Complete Competition Rules<\/em> version 2025.08.10 by PAPA.org, licensed under <a href=\"https://creativecommons.org/licenses/by-sa/3.0/us/\" target=\"_blank\" rel=\"noopener\">CC BY-SA 3.0 US<\/a>. Read the rules at <a href=\"https://www.ifpapinball.com/?p=8493\" target=\"_blank\" rel=\"noopener\">IFPA rules<\/a>. Not an official IFPA or PAPA product.<\/p><h2 class=\"label\">Search words<\/h2><p>Some search words were suggested by terms in <a href=\"https://en.wikipedia.org/wiki/Glossary_of_pinball_terms\" target=\"_blank\" rel=\"noopener\">Wikipedia's Glossary of pinball terms<\/a> (CC BY-SA). Only terms were used.<\/p><h2 class=\"label\">Glossary<\/h2><p>Terms marked as quoted from the rules are word for word. The other meanings are written for this site and checked against the glossaries of the <a href=\"https://www.ipdb.org/glossary.php\" target=\"_blank\" rel=\"noopener\">Internet Pinball Machine Database<\/a> and Wikipedia.<\/p>"}</script>
+<script id="rb-vocab" type="application/json">[{"when":["lazarus","lazarous","ball came back","ball bounced back","bounced back into play","drained ball came back","ball returned after draining","comes back","come back","came back","comes back into play"],"add":"lazarus drained ball bounces back into play without deliberate player action"},{"when":["death save","death saves","bangback","bangbacks","bang back","bang backs","banging back","save a ball by shaking"],"add":"death saves bangbacks banned from tournament play"},{"when":["ball save","ballsave","ball saver"],"add":"unexpected software ball save beneficial malfunction"},{"when":["jammed","wedged","hung up","trapped","wont come out","not coming out","cant get it out","ball is stuck","ball stuck"],"add":"stuck ball ball search free the ball"},{"when":["ball on the post","on top of the post","center post","centre post","inlane post","ball resting","ball at rest","at rest","came to rest","sitting on","balanced","apron"],"add":"ball comes to rest outlane center post inlane-outlane post apron not deemed a stuck ball"},{"when":["visor","afm","attack from mars","jackbot","spiderman","dirty pool"],"add":"ball behind the visor Attack From Mars Jackbot Spider-Man Dirty Pool stuck ball multiball"},{"when":["plunger","autoplunger","auto plunger","plunge","plunged","shooter lane","launch","launcher"],"add":"ball in the plunger lane autoplunger plunged by the player"},{"when":["trap","trapped","trapping","hold a ball","holding a ball","holding the other balls"],"add":"trap the other balls in play and request assistance stuck ball during multiball"},{"when":["stuck flipper","flipper stuck","flipper button stuck","stuck flipper button","flipper not working","flipper dead","flipper died","flipper stopped","flipper failed","flipper didnt work","flipper did not work","flipper wont work","flipper stays up","flipper stayed up","flipper froze","flipper quit","flipper not engaging","flipper wouldnt"],"add":"flipper not engaging flipper sticking in the held position Tournament Official recreate the problem major malfunction"},{"when":["bump","bumped","bumping","nudge","nudged","nudging","shake","shook","shaking","jostle","jostled","knocked the machine","hit the machine","hit the table","bumped the machine"],"add":"tilt nudging shaking bump the machine tilt warning player error"},{"when":["slam","slammed","slam tilt","slam tilted","slamtilt"],"add":"slam tilt score of zero catastrophic malfunction slam tilt sensor"},{"when":["tilted","tilted my ball","tilted their ball","tilted the other player","tilted another players ball","tilted someone elses ball","warning on my ball","warning for the next player","left a tilt warning","tilt through","tilt-through"],"add":"tilts the ball of another player score of zero tilt warning given to the following player"},{"when":["crash","crashed","crashes","crashing","reboot","rebooted","rebooting","froze","frozen","freeze","locked up","blue screen","restarted itself","rebooted itself","reset","resets","resetting","power outage","power out","lost power","power loss","power went out","power cut","went dark","shut off","shut down","turned off","unplugged","game over by itself","game ended by itself","went black","went blank","screen went black","screen went blank","display went blank","blacked out","blackout","dead screen","scores gone","scores are gone","score gone","score is gone","scores disappeared"],"add":"catastrophic malfunction game system crashes resets power lost or interrupted scores recorded additional balls on a new game"},{"when":["tripped over the cord","tripped over a cord","pulled the plug","power cord","kicked the plug","pulled the cord"],"add":"accidentally interferes tripping over a power cord pulling it from the wall catastrophic malfunction"},{"when":["randomly","on its own","by itself","itself","spontaneously","unexpectedly","out of nowhere","started itself","started on its own","started by itself","unexpected","without the player doing anything","without anyone doing anything","starts without","started without","starts when nobody","starts with no","mode starts","mode started","multiball starts","multiball started"],"add":"beneficial malfunction significant advantage not part of normal gameplay unexpected"},{"when":["glitch","glitched","bug","bugs","buggy","exploit","exploited","exploiting","abusing a bug","infinite","unlimited points"],"add":"programming bug unexpected scoring situation beneficial malfunction advantage warn the player end the game"},{"when":["wont start","didnt start","did not start","not starting","doesnt start","never started","mode didnt start","mode wont start","modes didnt start","not working","doesnt work","didnt work","stopped working","isnt working","broken","broke","feature not working","targets not working","target not working","target didnt work","not opening","didnt open","doesnt open","door not opening","inoperative","dead feature","wasnt working","doesnt register","didnt register","not registering"],"add":"minor malfunction deviates from normal course of gameplay loss of lit feature running mode normal play"},{"when":["out of turn","wrong turn","wrong player","wrong order","played the wrong ball","next player started","skipped a player","skipped","advanced to the next player","advanced player","player 2 played","someone else played"],"add":"plays out of turn game score of zero take over the ball in play major malfunction advancing to the next player position"},{"when":["wrong number of players","incorrect number of players","too many players","too few players","extra player","missing player","player missing","forgot a player","forgot to add","added a player","add a player","not enough players","started with the wrong","started as one player","started one player","one player game","single player game","only one player","3 players","three players","two players"],"add":"game started with the incorrect number of players void players added once player 1 has plunged restarted from scratch"},{"when":["eject","ejected","ejection","kicked out","kick out","thrown out","throw out","banned","ban","expel","expelled","red card","removed from the tournament","removed from the venue"],"add":"ejection from the tournament facility banned red card expulsion"},{"when":["dq","dqd","disqualify","disqualified","disqualification","disqualifying"],"add":"disqualified disqualification score of zero ticket interrupted"},{"when":["td","tds","tournament director","tournament directors","director"],"add":"Tournament Director Tournament Directors"},{"when":["official","officials","ref","referee","judge","umpire","tournament official"],"add":"Tournament Official Tournament Officials"},{"when":["sk","scorekeeper","score keeper","scorekeepers","scorer","score keepers"],"add":"Scorekeeper alert the Scorekeeper"},{"when":["zero","zeroed","score of 0","scored zero","no score","gets a zero","give a zero","give them a zero","zero points"],"add":"score of zero for the game"},{"when":["rubber foot","foot","leg leveler","leg","leveler","levelers","slid","slides","slid off","moved the machine","machine moved","walked the machine","shifted the machine","pushed the machine","machine slid","game slid"],"add":"game slides off of a rubber foot beneath the game's leg score of zero leg leveler"},{"when":["coach","coaching","coached","advice","giving advice","helping a player","helped a player","told them what to do","telling a player","spectator","spectators","commenting","backseat","heckling","talking to a player","talking during"],"add":"coaching of any player while at the machine is not allowed spectators refrain from commenting yellow or red card"},{"when":["phone","camera","photo","cheat sheet","tablet","video","looking at their phone","using a phone"],"add":"no player may use a camera or visual aid while standing at the machine written notes"},{"when":["delay","delaying","delayed","stall","stalling","stalled","slow","slow play","too long","taking forever","taking too long","waiting","holding the ball","hold the ball","holding ball","ball held","60 seconds","sixty seconds","timeout","time out","ball search on purpose"],"add":"intentional delay more than 60 seconds warning score of zero ball held on a flipper plunger lane intentionally causing a ball search"},{"when":["no show","noshow","absent","absence","late","not here","not there","didnt show","did not show","wandered off","bathroom","emergency","came back late","not at the machine","wasnt there","isnt here","left the building","leave the building","left the tournament","leave the tournament","leaving the tournament","walked off","went home","go home","dropped out","withdrew","withdrawn","left early","leaving early","has to leave"],"add":"absent at the start of the game name announced three times three minutes to return recorded as a zero"},{"when":["argue","arguing","argued","argues","complain","complaining","disagree","disagreeing","yell","yelled","yelling","rude","rudeness","swear","swearing","fight","harass","harassment","threat","threatened","angry","outburst","unsportsmanlike","poor sportsmanship","attitude","dispute","disputing"],"add":"argues a ruling once it has been made will receive a warning rudeness outbursts unacceptable conduct"},{"when":["abuse","abusing","punch","punched","kick the machine","kicked the machine","kicked","slap","slapped","hit the glass","lifted the machine","rocked the machine","tipping","tipped the machine"],"add":"abuse of machines punching kicking lifting tipping or rocking a machine hitting the glass warning disqualification"},{"when":["extra ball","extra balls","replay","replays","free game","buy in","buyin","continues","tilt warnings setting","settings","factory settings","tournament mode","free play","five ball","5 ball","3 ball","three ball","game restart","ball save setting","difficulty"],"add":"software settings tournament mode free play 3 balls extra balls disabled replays disabled buy-in or continues disabled"},{"when":["rolled over","rollover","roll over","rolls over","max score","maximum score","9999999","score reel","score reels","reel","reels","overflow","turned over","wrapped around","went back to zero"],"add":"score rolls over to zero maximum possible score advise the Scorekeeper score reel skipping electromechanical"},{"when":["concede","concedes","conceded","conceding","gave up","resign","forfeit","forfeited"],"add":"verbally concedes concession witnessed by a Scorekeeper Tournament Director or all members of a group"},{"when":["bet","bets","betting","gamble","gambling","wager","wagering","side bet"],"add":"wagering or gambling bet suppression from the WPPR"},{"when":["broke down","breakdown","out of order","cant be fixed","cannot be fixed","unfixable","take offline","taken out of service","swap machine","swap the machine","substitute","replace the machine","replacement machine","machine is down","machine down","disabled machine","dead machine","permanently broken"],"add":"disabled machine breakdown cannot be repaired substitute machine 50% through qualifying scores void replacement tickets"},{"when":["comp","comp ball","compensation","compensate","make up","makeup","make it up","extra ball for them","give them a ball","replacement ball","replacement balls","additional ball","additional balls","redo","do over","doover","make good"],"add":"additional ball of play new game replacement balls compensation add a ball to the game in progress"},{"when":["restart","restarted","restarting","start over","start again","starting over","redo the game","restart the game","begin again","from scratch","play again"],"add":"game restarted terminated and restarted start their game over from scratch"},{"when":["void","voided","voiding","invalid","doesnt count","does not count","not count","discard","throw out the score","wipe the score","erase the score"],"add":"void the score voided anything that occurs is considered void"},{"when":["finals","final round","final rounds","playoffs","playoff","top 4","top four","semifinals","stricter","strict","elimination"],"add":"malfunctions dealt with more strictly during final rounds than qualifying rounds"},{"when":["who decides","who rules","who makes the call","authority","final authority","appeal","appealing","overrule","overruled","override","conflict of interest","recuse","recused","my friend","playing and ruling","ruling on my own game","ruling on myself"],"add":"rulings shall be made by Tournament Officials final authority recused from ruling a situation that affects their standing as a player"},{"when":["disability","disabilities","accessibility","accessible","wheelchair","interpreter","translator","language","bilingual","injury","injured","accommodate","accommodation","accommodations"],"add":"accommodating disabilities temporary disabilities injuries bilingual assistant"},{"when":["known issue","known problem","known malfunction","posted","sign on the machine","notice on the machine","already known","known quirk","quirk"],"add":"known malfunction posted for players to be aware minor malfunction"},{"when":["collusion","collude","colluding","cheat","cheating","cheated","tampering","tamper","throw the game","throwing a game","tank","tanking","lock out","lockout"],"add":"interference collusion cheating tampering lock out a third player disqualification ejection"},{"when":["interfere","interfered","interfering","interference","distract","distracted","distracting","distraction","touched the player","touched the machine","blocked","bumped the player","bumped into"],"add":"interferes with the play of another player through distraction touching the machine or player accidental interference warned loss of ball major malfunction"},{"when":["ball search","ball searches","ballsearch","searching for the ball"],"add":"three automatic ball searches stuck ball waive the forcing of a ball search"},{"when":["multiball","multi ball","multi-ball"],"add":"multiball play loss of one or more balls during multiball minor malfunction stuck ball"},{"when":["ticket","tickets","entry","entries","reentry","re-entry","unlimited entry"],"add":"ticket disqualified replacement tickets entries"},{"when":["score photo","wrong score","score is wrong","misread score","misrecorded","score was wrong","recorded wrong","typo in score"],"add":"tampering with recorded results scorekeeper recorded score adjust scores obvious error"},{"when":["scoop","saucer","popper","kickout hole","kick out hole","vuk","up kicker","upkicker","subway"],"add":"stuck ball free the ball"},{"when":["shooter lane"],"add":"plunger lane"},{"when":["slingshot","bumper","pop bumper","spinner","drop target","standup target","stand up target","loop","orbit"],"add":"major playfield feature ceases to function malfunction"}]</script>
+<script>
+(function(){
+'use strict';
+var DATA = JSON.parse(document.getElementById('rb-data').textContent);
+var VOCAB = JSON.parse(document.getElementById('rb-vocab').textContent);
+var SECTIONS = DATA.sections;
+var SEC_BY_ID = {};
+SECTIONS.forEach(function(s,i){ SEC_BY_ID[s.id]=i; });
+
+/* ---------- text normalising, stemming ---------- */
+var STOP = new Set(('a an the of in on at to for and or is are was were be been being it its this that these those with as by from if '+
+  'then than so do does did not no can may will shall should must has have had you your i we they he she them their his her there here '+
+  'when while which who whom what any all some such into out up over under also but about just how').split(' '));
+function normalize(s){
+  return s.toLowerCase()
+    .replace(/[’‘`]/g,"'").replace(/'/g,'')
+    .replace(/multi[\s\-]+ball/g,'multiball')
+    .replace(/score[\s\-]+keeper/g,'scorekeeper')
+    .replace(/jack[\s*\-]*bot/g,'jackbot')
+    .replace(/spider[\s\-]+man/g,'spiderman')
+    .replace(/auto[\s\-]+plunger/g,'autoplunger')
+    .replace(/bang[\s\-]+back/g,'bangback');
+}
+function words(s){ return normalize(s).split(/[^a-z0-9]+/).filter(Boolean); }
+function undouble(w){ return /([^aeioulsz])\1$/.test(w) ? w.slice(0,-1) : w; }
+function stem(w){
+  if (w.length < 4) return w;
+  if (w.length > 4 && w.slice(-3) === 'ies') w = w.slice(0,-3)+'y';
+  else if (/(sses|shes|ches|xes|zes)$/.test(w)) w = w.slice(0,-2);
+  else if (w.slice(-1) === 's' && !/(ss|us|is)$/.test(w)) w = w.slice(0,-1);
+  if (w.length > 5 && w.slice(-2) === 'ly') w = w.slice(0,-2);
+  if (w.length > 5 && w.slice(-3) === 'ing') w = undouble(w.slice(0,-3));
+  else if (w.length > 4 && w.slice(-2) === 'ed') w = undouble(w.slice(0,-2));
+  if (w.length > 3 && w.slice(-1) === 'e') w = w.slice(0,-1);
+  return w;
+}
+function toks(s){ var o=[]; words(s).forEach(function(w){ if(!STOP.has(w)) o.push(stem(w)); }); return o; }
+function uniq(a){ return Array.from(new Set(a)); }
+
+/* ---------- index (BM25 over passages) ---------- */
+var CH = [];
+SECTIONS.forEach(function(s,si){ s.chunks.forEach(function(c,ci){ CH.push({si:si, ci:ci, text:c.t}); }); });
+var N = CH.length, post = new Map(), dlen = [], totalLen = 0;
+CH.forEach(function(c,d){
+  c.tt = toks(SECTIONS[c.si].title); c.xt = toks(c.text);
+  dlen[d] = c.xt.length; totalLen += c.xt.length;
+  function bump(t,k){ var m=post.get(t); if(!m){ m=new Map(); post.set(t,m); } var e=m.get(d); if(!e){ e=[0,0]; m.set(d,e); } e[k]++; }
+  c.tt.forEach(function(t){ bump(t,0); }); c.xt.forEach(function(t){ bump(t,1); });
+});
+var AVG = totalLen / N, K1 = 1.2, B = 0.75, TITLE_W = 3;
+var VOC = Array.from(post.keys());
+var idfCache = new Map();
+function idf(t){ var v=idfCache.get(t); if(v===undefined){ var df=post.get(t).size; v=Math.log(1+(N-df+0.5)/(df+0.5)); idfCache.set(t,v);} return v; }
+function bm25(t,d){
+  var e = post.get(t).get(d); if(!e) return 0;
+  var i = idf(t), s = 0;
+  if (e[1]) s += i*e[1]*(K1+1)/(e[1]+K1*(1-B+B*dlen[d]/AVG));
+  if (e[0]) s += i*TITLE_W*(e[0]*(K1+1)/(e[0]+K1));
+  return s;
+}
+function editDist(a,b,max){
+  var m=a.length, n=b.length; if (Math.abs(m-n) > max) return max+1;
+  var prev2=null, prev=[], cur, i, j;
+  for (j=0;j<=n;j++) prev[j]=j;
+  for (i=1;i<=m;i++){
+    cur=[i]; var rowMin=i;
+    for (j=1;j<=n;j++){
+      var c = a[i-1]===b[j-1] ? 0 : 1;
+      var v = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+c);
+      if (i>1 && j>1 && a[i-1]===b[j-2] && a[i-2]===b[j-1]) v = Math.min(v, prev2[j-2]+1);
+      cur[j]=v; if (v<rowMin) rowMin=v;
+    }
+    if (rowMin>max) return max+1;
+    prev2=prev; prev=cur;
+  }
+  return prev[n];
+}
+function variants(q, fuzzy){
+  var out=[], seen=new Set();
+  if (post.has(q)){ out.push([q,1]); seen.add(q); }
+  if (q.length>=3){ VOC.forEach(function(t){ if(t!==q && t.indexOf(q)===0 && !seen.has(t)){ out.push([t,0.6]); seen.add(t); } }); }
+  if (fuzzy && q.length>=5 && !post.has(q)){
+    var md = q.length>=9 ? 2 : 1;
+    VOC.forEach(function(t){ if(!seen.has(t) && Math.abs(t.length-q.length)<=md && editDist(q,t,md)<=md){ out.push([t,0.45]); seen.add(t); } });
+  }
+  return out;
+}
+function scoreChunks(terms, fuzzy){
+  var scores = new Map(), matched = new Map();
+  terms.forEach(function(q){
+    var best = new Map();
+    variants(q,fuzzy).forEach(function(v){
+      post.get(v[0]).forEach(function(e,d){ var s=v[1]*bm25(v[0],d); if (s>(best.get(d)||0)) best.set(d,s); });
+    });
+    best.forEach(function(s,d){ scores.set(d,(scores.get(d)||0)+s); matched.set(d,(matched.get(d)||0)+1); });
+  });
+  scores.forEach(function(s,d){ scores.set(d, s*(0.5+0.5*matched.get(d)/terms.length)); });
+  for (var i=0;i+1<terms.length;i++){
+    var a=terms[i], b=terms[i+1];
+    scores.forEach(function(s,d){
+      var x=CH[d].xt; for (var k=0;k+1<x.length;k++){ if (x[k]===a && x[k+1]===b){ scores.set(d, scores.get(d)+1.5); break; } }
+    });
+  }
+  return scores;
+}
+
+/* ---------- pinball vocabulary (query-time synonyms) ---------- */
+VOCAB.forEach(function(e){ e.seqs = e.when.map(function(w){ return words(w).map(stem); }); });
+function containsSeq(hay, needle){
+  if (!needle.length) return false;
+  for (var i=0;i+needle.length<=hay.length;i++){ var ok=true; for (var j=0;j<needle.length;j++){ if (hay[i+j]!==needle[j]){ ok=false; break; } } if (ok) return true; }
+  return false;
+}
+function expansions(q){
+  var qw = words(q).map(stem), out=[];
+  VOCAB.forEach(function(e){ if (e.seqs.some(function(s){ return containsSeq(qw,s); })) out.push(e.add); });
+  return out;
+}
+
+/* ---------- search ---------- */
+var ROMAN = {i:'I', ii:'II', iii:'III', iv:'IV'};
+function parseId(qn){
+  var m = /^(?:section\s+|rule\s+)?(iv|iii|ii|i)\s*\.?\s*(\d{1,2})$/.exec(qn.trim());
+  if (!m) return null; var id = ROMAN[m[1]]+'.'+m[2];
+  return id in SEC_BY_ID ? id : null;
+}
+/* words that appear in a big share of the rulebook (e.g. "ball") are not highlighted unless they are all that was typed */
+function pickHl(terms){
+  var keep = terms.filter(function(t){ var m=post.get(t); return !m || m.size/N < 0.2; });
+  return keep.length ? keep : terms;
+}
+function search(q){
+  q = (q||'').trim();
+  var terms = toks(q), idm = parseId(normalize(q));
+  var res = { results:[], terms:terms, hl:pickHl(terms), expTerms:[], exact:idm };
+  if (!terms.length && !idm) return res;
+  var prim = terms.length ? scoreChunks(terms,true) : new Map();
+  var exps = terms.length ? expansions(q) : [];
+  var expTerms = exps.length ? uniq(toks(exps.join(' '))) : [];
+  var exp = expTerms.length ? scoreChunks(expTerms,false) : new Map();
+  var scale = expTerms.length ? 0.8*Math.min(terms.length,3)/Math.max(1,expTerms.length)*1.8 : 0;
+  var comb = new Map();
+  prim.forEach(function(s,d){ comb.set(d,s); });
+  exp.forEach(function(s,d){ comb.set(d,(comb.get(d)||0)+s*scale); });
+  var bySec = new Map();
+  comb.forEach(function(s,d){ var si=CH[d].si; if(!bySec.has(si)) bySec.set(si,[]); bySec.get(si).push({d:d, ci:CH[d].ci, score:s}); });
+  var list = [];
+  bySec.forEach(function(ch,si){
+    ch.sort(function(a,b){ return b.score-a.score; });
+    list.push({ si:si, id:SECTIONS[si].id, score: ch[0].score + 0.25*(ch[1]?ch[1].score:0), chunks:ch });
+  });
+  list.sort(function(a,b){ return b.score-a.score; });
+  var top = list.length ? list[0].score : 0;
+  list = list.filter(function(r){ return r.score >= 0.25*top; }).slice(0,10);
+  if (idm){
+    list = list.filter(function(r){ return r.id!==idm; });
+    list.unshift({ si:SEC_BY_ID[idm], id:idm, score:Infinity, exact:true, chunks:[] });
+  }
+  res.results = list; res.expTerms = expTerms;
+  return res;
+}
+
+/* ---------- rendering ---------- */
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function hitWord(w, stems){
+  var n = normalize(w); if (!n || STOP.has(n)) return false; var s = stem(n);
+  for (var i=0;i<stems.length;i++){ var q=stems[i]; if (s===q || (q.length>=3 && s.indexOf(q)===0)) return true; }
+  return false;
+}
+function hl(text, stems){
+  if (!stems.length) return esc(text);
+  var out='', last=0, re=/[A-Za-z0-9]+/g, m;
+  while ((m = re.exec(text))){
+    out += esc(text.slice(last,m.index));
+    out += hitWord(m[0],stems) ? '<mark>'+esc(m[0])+'</mark>' : esc(m[0]);
+    last = m.index + m[0].length;
+  }
+  return out + esc(text.slice(last));
+}
+function snippet(text, stems, expStems){
+  var sents = text.split(/(?<=[.!?])\s+/);
+  if (sents.length===1 && text.length<=300) return hl(text, stems);
+  var best=0, bestScore=-1;
+  sents.forEach(function(s,i){
+    var sc=0; (s.match(/[A-Za-z0-9]+/g)||[]).forEach(function(w){ if (hitWord(w,stems)) sc+=2; else if (hitWord(w,expStems)) sc+=1; });
+    if (sc>bestScore){ bestScore=sc; best=i; }
+  });
+  var out = sents[best];
+  if (out.length<150 && sents[best+1]) out += ' ' + sents[best+1];
+  var pre = best>0 ? '… ' : '', post2 = (best+1 < sents.length && out.length < text.length) ? ' …' : '';
+  return pre + hl(out, stems) + post2;
+}
+function termText(text, re){
+  var g = new RegExp(re.source, 'gi'), out = '', last = 0, m;
+  while ((m = g.exec(text))){
+    if (!m[0]) { g.lastIndex++; continue; }
+    out += richText(text.slice(last, m.index), []) + '<mark>' + esc(m[0]) + '</mark>';
+    last = m.index + m[0].length;
+  }
+  return out + richText(text.slice(last), []);
+}
+var TITLE_LINK = {};
+SECTIONS.forEach(function(s){ TITLE_LINK[s.title]=s.id; });
+Object.keys(DATA.parts).forEach(function(p){ var first = SECTIONS.filter(function(s){ return s.part===p; })[0]; if (first && !TITLE_LINK[DATA.parts[p]]) TITLE_LINK[DATA.parts[p]] = first.id; });
+function richText(text, stems){
+  var out='', last=0, re=/“([^”]+)”/g, m;
+  while ((m = re.exec(text))){
+    var id = TITLE_LINK[m[1]];
+    if (!id) continue;
+    out += hl(text.slice(last,m.index), stems) + '<a href="#s/'+id+'">“'+hl(m[1],stems)+'”</a>';
+    last = m.index + m[0].length;
+  }
+  return out + hl(text.slice(last), stems);
+}
+
+var $q = document.getElementById('q'), $main = document.getElementById('main'), $field = document.getElementById('field');
+document.getElementById('ver').textContent = DATA.version;
+document.getElementById('foot').innerHTML = DATA.footer;
+var secCtx = null;
+var lastQuery = '', lastSearch = null, savedY = 0, restoreY = null;
+
+var SUGGEST_POOL = ['stuck ball in multiball','slam tilt','out of turn','lazarus','death save','bangback','kickback','ball save','tilt warning','tilting','disqualified','slow play','no show','coaching','yellow card','score rolled over','wrong number of players','extra balls setting','betting on a game','kicked the machine','known malfunction','stuck flipper','machine crashed','ball on top of the center post'];
+function pickSuggest(){ var a = SUGGEST_POOL.slice(); for (var i = a.length-1; i > 0; i--){ var j = Math.floor(Math.random()*(i+1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a.slice(0,4); }
+var SUGGEST = pickSuggest();
+
+var TOPICS = DATA.topics || [], TOPIC_BY_ID = {}, SEC_TOPICS = {}, TOPIC_GROUP = {};
+TOPICS.forEach(function(g){ g.topics.forEach(function(t){
+  TOPIC_BY_ID[t.id] = t; TOPIC_GROUP[t.id] = g.group;
+  t.sections.forEach(function(id){ (SEC_TOPICS[id] = SEC_TOPICS[id] || []).push(t.id); });
+}); });
+var topicView = null, filters = new Set();
+function firstSentence(t){
+  t = t.replace(/^\(?[A-Za-z0-9]{1,2}[.)]\s+/, '');
+  return t.split(/(?<=[.!?])\s+/)[0];
+}
+function topicsHtml(){
+  var h = '<div class="toc topics"><h2 class="label">Browse by topic</h2>';
+  TOPICS.forEach(function(g){
+    h += '<h3 class="tgroup">'+esc(g.group)+'</h3>';
+    g.topics.forEach(function(t){
+      h += '<a class="trow" href="#t/'+t.id+'"><span class="tn">'+esc(t.name)+'</span><small>'+t.sections.length+'</small></a>';
+    });
+  });
+  return h + '</div>';
+}
+function sectionCard(id, bodyHtml, meta){
+  var s = SECTIONS[SEC_BY_ID[id]];
+  return '<a class="card" href="#s/'+id+'"><div class="card-head"><span class="sid">'+esc(id)+'</span><span class="stitle">'+esc(s.title)+'</span></div>'+bodyHtml+(meta?'<div class="meta">'+meta+'</div>':'')+'</a>';
+}
+function renderTopic(id){
+  var t = TOPIC_BY_ID[id];
+  if (!t){ topicView = null; return false; }
+  var h = '<a class="back tback" href="#">← Topics</a><h1 class="sec-title">'+esc(t.name)+'</h1><p class="sec-part">'+esc(TOPIC_GROUP[id])+'</p>';
+  t.sections.forEach(function(sid){
+    h += sectionCard(sid, '<div class="snip">'+esc(firstSentence(SECTIONS[SEC_BY_ID[sid]].chunks[0].t))+'</div>');
+  });
+  $main.innerHTML = h; window.scrollTo(0,0);
+  return true;
+}
+var GLOSS = DATA.glossary || [], GLOSS_BY_ID = {}, gloss = null;
+GLOSS.forEach(function(g){
+  GLOSS_BY_ID[g.id] = g;
+  g.re = new RegExp('\\b(?:'+g.aliases.map(function(a){ return a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }).join('|')+')\\b','i');
+  g.keys = [g.term].concat(g.aliases).map(function(x){ return normalize(x).trim(); });
+});
+function glossPreview(g){ return g.kind==='rules' ? firstSentence(g.text) : g.meaning; }
+function glossUsage(g){
+  var out = [];
+  SECTIONS.forEach(function(s){
+    var n = 0; s.chunks.forEach(function(c){ if (g.re.test(c.t)) n++; });
+    if (n) out.push({id:s.id, title:s.title, n:n});
+  });
+  return out;
+}
+function glossMatches(q){
+  var qn = normalize(q).trim();
+  if (qn.length < 3) return [];
+  return GLOSS.filter(function(g){
+    return g.keys.some(function(k){ return k===qn || (qn.length>=4 && k.indexOf(qn)===0); });
+  }).slice(0,2);
+}
+function glossCard(g){
+  return '<a class="card gcard" href="#g/'+g.id+'"><div class="card-head"><span class="stitle">'+esc(g.term)+'</span><span class="gtag">Glossary</span></div><div class="snip">'+esc(glossPreview(g))+'</div></a>';
+}
+function glossaryRow(){
+  return '<div class="toc topics"><h3 class="tgroup">Glossary</h3><a class="trow" href="#g"><span class="tn">Pinball terms A–Z</span><small>'+GLOSS.length+'</small></a></div>';
+}
+function renderGlossary(){
+  var h;
+  if (gloss==='list' || !GLOSS_BY_ID[gloss]){
+    gloss = 'list';
+    h = '<a class="back gback" href="#">← Topics</a><h1 class="sec-title">Glossary</h1><p class="sec-part">Pinball terms A–Z</p><div class="toc topics qlist">';
+    GLOSS.slice().sort(function(a,b){ return a.term.localeCompare(b.term); }).forEach(function(g){
+      h += '<a class="trow" href="#g/'+g.id+'"><span class="tn">'+esc(g.term)+'</span>'+(g.kind==='rules'?'<small>'+esc(g.from)+'</small>':'')+'</a>';
+    });
+    $main.innerHTML = h + '</div>'; window.scrollTo(0,0);
+    return true;
+  }
+  var e = GLOSS_BY_ID[gloss];
+  h = '<a class="back gback" href="#">← Glossary</a><h1 class="sec-title">'+esc(e.term)+'</h1>';
+  if (e.kind==='rules'){
+    var s = SECTIONS[SEC_BY_ID[e.from]];
+    h += '<blockquote class="gdef">'+esc(e.text)+'</blockquote><p class="sec-part">From <a href="#s/'+e.from+'">'+esc(e.from)+' '+esc(s.title)+'</a></p>';
+  } else {
+    h += '<p class="gmean">'+esc(e.meaning)+'</p><p class="sec-part">Common pinball term, not defined in the rules</p>';
+  }
+  var use = glossUsage(e);
+  if (use.length){
+    h += '<h2 class="label">Related sections</h2><div class="toc topics qlist">';
+    use.forEach(function(u){ h += '<a class="trow" href="#s/'+u.id+'"><span class="tn"><span class="sid">'+esc(u.id)+'</span>'+esc(u.title)+'</span><small>'+u.n+'</small></a>'; });
+    h += '</div>';
+  }
+  $main.innerHTML = h; window.scrollTo(0,0);
+  return true;
+}
+function renderAck(){
+  $main.innerHTML = '<a class="back aback" href="#">← Home</a><h1 class="sec-title">Acknowledgements</h1>'+DATA.ack; window.scrollTo(0,0);
+}
+var CHEAT = DATA.cheatsheet || [], CHEAT_BY_ID = {}, cheat = null;
+CHEAT.forEach(function(c){ CHEAT_BY_ID[c.id] = c; });
+function renderCheat(){
+  var h;
+  if (cheat==='list' || !CHEAT_BY_ID[cheat]){
+    cheat = 'list';
+    h = '<a class="back cback" href="#">← Home</a><h1 class="sec-title">Quick reference</h1><p class="sec-part">Common situations</p><div class="toc topics qlist">';
+    CHEAT.forEach(function(c){ h += '<a class="trow" href="#c/'+c.id+'"><span class="tn">'+esc(c.situation)+'</span></a>'; });
+    $main.innerHTML = h + '</div>'; window.scrollTo(0,0);
+    return true;
+  }
+  var e = CHEAT_BY_ID[cheat];
+  h = '<a class="back cback" href="#">← Quick reference</a><h1 class="sec-title">'+esc(e.situation)+'</h1>';
+  e.items.forEach(function(it){
+    var s = SECTIONS[SEC_BY_ID[it.from]];
+    h += '<div class="csi"><blockquote class="gdef">'+esc(it.text)+'</blockquote><p class="sec-part"><a href="#s/'+it.from+'">'+esc(it.from)+' '+esc(s.title)+'</a></p></div>';
+  });
+  $main.innerHTML = h; window.scrollTo(0,0);
+  return true;
+}
+function tocHtml(cur){
+  var h = '<details class="allsec toc"><summary>All sections</summary>';
+  Object.keys(DATA.parts).forEach(function(p){
+    h += '<h3>'+esc(p)+'. '+esc(DATA.parts[p])+'</h3>';
+    SECTIONS.filter(function(s){ return s.part===p; }).forEach(function(s){
+      h += '<a href="#s/'+s.id+'" data-keep="1"'+(s.id===cur?' aria-current="true"':'')+'><span class="sid">'+esc(s.id)+'</span><span>'+esc(s.title)+'</span></a>';
+    });
+  });
+  var about = SECTIONS.filter(function(s){ return s.part===''; });
+  about.forEach(function(s){ h += '<a href="#s/'+s.id+'"><span class="sid">—</span><span>'+esc(s.title)+'</span></a>'; });
+  return h + '</details>';
+}
+function renderSearch(){
+  var q = $q.value;
+  $field.classList.toggle('has', !!q);
+  if (ack){ renderAck(); return; }
+  if (cheat && renderCheat()) return;
+  if (gloss && renderGlossary()) return;
+  if (topicView && renderTopic(topicView)) return;
+  if (!q.trim()){
+    lastQuery=''; lastSearch=null; filters.clear();
+    var n1 = SECTIONS[SEC_BY_ID['I.1']];
+    var h = '<h2 class="label">Try a search</h2><div class="chips">';
+    SUGGEST.forEach(function(s){ h += '<button type="button" class="chip" data-q="'+esc(s)+'">'+esc(s)+'</button>'; });
+    h += '</div>';
+    if (n1) h += '<h2 class="label">Read</h2><a class="card start" href="#s/I.1"><div class="card-head"><span class="sid">I.1</span><span class="stitle">'+esc(n1.title)+'</span></div><div class="snip">'+esc(firstSentence(n1.chunks[0].t))+'</div></a>';
+    h += '<h2 class="label">Glossary</h2><a class="card" href="#g"><div class="card-head"><span class="stitle">Pinball terms A–Z</span></div></a>';
+    h += '<h2 class="label">Quick reference</h2><a class="card" href="#c"><div class="card-head"><span class="stitle">Common situations</span></div></a>';
+    $main.innerHTML = h + topicsHtml() + '' + tocHtml();
+    return;
+  }
+  topicView = null; gloss = null; cheat = null;
+  var r = search(q); lastQuery=q; lastSearch=r;
+  var gh = glossMatches(q).map(glossCard).join('');
+  if (!r.results.length){
+    $main.innerHTML = gh + '<div class="note">No matches for “'+esc(q)+'”. Try fewer or different words, or use a word from the situation (for example “tilt”, “drain”, “stuck”).</div>' + tocHtml();
+    return;
+  }
+  var counts = {};
+  r.results.forEach(function(x){ (SEC_TOPICS[x.id]||[]).forEach(function(id){ counts[id]=(counts[id]||0)+1; }); });
+  var h = gh;
+  if (Object.keys(counts).length > 1 || filters.size){
+    h += '<div class="tf"><div class="tfh"><h2 class="label">Narrow by topic</h2>'+(filters.size?'<button type="button" class="tclear">Clear</button>':'')+'</div><div class="chips">';
+    TOPICS.forEach(function(g){ g.topics.forEach(function(t){ if (counts[t.id] || filters.has(t.id)) h += '<button type="button" class="tfchip" data-t="'+t.id+'" aria-pressed="'+(filters.has(t.id)?'true':'false')+'">'+esc(t.name)+'<small>'+(counts[t.id]||0)+'</small></button>'; }); });
+    h += '</div></div>';
+  }
+  var shown = filters.size ? r.results.filter(function(x){ return (SEC_TOPICS[x.id]||[]).some(function(id){ return filters.has(id); }); }) : r.results;
+  if (!shown.length){
+    $main.innerHTML = h + '<div class="note">No matches for “'+esc(q)+'” in the selected topics. Tap Clear to see all results.</div>';
+    return;
+  }
+  shown.forEach(function(x){
+    var s = SECTIONS[x.si], body;
+    if (x.exact || !x.chunks.length){
+      body = '<div class="snip">'+hl(firstSentence(s.chunks[0].t), [])+'</div>';
+    } else {
+      var best = s.chunks[x.chunks[0].ci].t;
+      body = '<div class="snip">'+snippet(best, r.hl, r.expTerms)+'</div>';
+    }
+    var n = x.chunks.length;
+    h += '<a class="card" href="#s/'+x.id+'"><div class="card-head"><span class="sid">'+esc(x.id)+'</span><span class="stitle">'+esc(s.title)+'</span></div>'+body+
+         '<div class="meta">'+(x.exact?'Section '+esc(x.id):(n+' matching passage'+(n===1?'':'s')))+'</div></a>';
+  });
+  $main.innerHTML = h;
+}
+function renderSection(id){
+  var si = SEC_BY_ID[id];
+  if (si===undefined){ current = null; renderSearch(); return; }
+  var s = SECTIONS[si], stems = lastSearch ? lastSearch.hl : [];
+  var hits = new Set(), bestCi = -1;
+  if (lastSearch){
+    var res = lastSearch.results.filter(function(r){ return r.id===id; })[0];
+    if (res && res.chunks.length){
+      var top = res.chunks[0].score; bestCi = res.chunks[0].ci;
+      res.chunks.slice(0,3).forEach(function(c){ if (c.score>=0.75*top) hits.add(c.ci); });
+    }
+  }
+  var ctx = secCtx && secCtx.id===id ? secCtx : null;
+  if (ctx){ hits.clear(); bestCi = -1; }
+  if (ctx && ctx.re){ s.chunks.some(function(c,ci){ if (new RegExp(ctx.re.source,'i').test(c.t)){ bestCi = ci; return true; } }); }
+  if (ctx && ctx.quote){ s.chunks.forEach(function(c,ci){ if (c.t.indexOf(ctx.quote)>=0){ hits.add(ci); if (bestCi<0) bestCi = ci; } }); }
+  var h = '<a class="back" href="#">← '+(lastQuery?'Results':(topicView&&TOPIC_BY_ID[topicView]?TOPIC_BY_ID[topicView].name:(cheat&&CHEAT_BY_ID[cheat]?CHEAT_BY_ID[cheat].situation:(gloss&&GLOSS_BY_ID[gloss]?GLOSS_BY_ID[gloss].term:(gloss==='list'?'Glossary':(cheat==='list'?'Quick reference':'Rulebook'))))))+'</a>';
+  h += '<h1 class="sec-title">'+(s.part?esc(s.id)+' ':'')+esc(s.title)+'</h1>';
+  h += '<p class="sec-part">'+(s.part?'Part '+esc(s.part)+' · '+esc(DATA.parts[s.part]):'')+'</p>';
+  s.chunks.forEach(function(c,ci){
+    h += '<p class="chunk '+(c.k==='li'?'li ':'')+(hits.has(ci)?'hit':'')+'" data-ci="'+ci+'">'+(ctx && ctx.re ? termText(c.t, ctx.re) : richText(c.t, stems))+'</p>';
+  });
+  var rel = (DATA.seealso||{})[id];
+  if (rel && rel.length){
+    h += '<h2 class="label">See also</h2><div class="toc topics qlist">';
+    rel.forEach(function(r){ var t = SECTIONS[SEC_BY_ID[r]]; h += '<a class="trow" href="#s/'+r+'"><span class="tn"><span class="sid">'+esc(r)+'</span>'+esc(t.title)+'</span></a>'; });
+    h += '</div>';
+  }
+  var prev = SECTIONS[si-1], next = SECTIONS[si+1];
+  h += '<div class="pager">'+(prev?'<a href="#s/'+prev.id+'"><small>Previous</small>'+esc(prev.id)+' '+esc(prev.title)+'</a>':'<span style="flex:1"></span>')+
+       (next?'<a class="next" href="#s/'+next.id+'"><small>Next</small>'+esc(next.id)+' '+esc(next.title)+'</a>':'<span style="flex:1"></span>')+'</div>';
+  h += tocHtml(id);
+  $main.innerHTML = h;
+  var first = bestCi>=0 ? $main.querySelector('.chunk[data-ci="'+bestCi+'"]') : null;
+  if (first) first.scrollIntoView({block:'center'}); else window.scrollTo(0,0);
+}
+/* Navigation keeps its own state (current = open section id, or null for search) and mirrors it to the
+   URL hash when the page is allowed to, so the browser Back button works and sections can be bookmarked. */
+var current = null, ack = false;
+function parseHash(){ var m = /^#s\/(.+)$/.exec(location.hash); return m ? decodeURIComponent(m[1]) : null; }
+function parseTopic(){ var m = /^#t\/(.+)$/.exec(location.hash); return m && TOPIC_BY_ID[decodeURIComponent(m[1])] ? decodeURIComponent(m[1]) : null; }
+function parseCheat(){ var m = /^#c(?:\/(.+))?$/.exec(location.hash); return m ? (m[1] && CHEAT_BY_ID[decodeURIComponent(m[1])] ? decodeURIComponent(m[1]) : 'list') : null; }
+function parseAck(){ return location.hash==='#a'; }
+function parseGloss(){ var m = /^#g(?:\/(.+))?$/.exec(location.hash); return m ? (m[1] && GLOSS_BY_ID[decodeURIComponent(m[1])] ? decodeURIComponent(m[1]) : 'list') : null; }
+function setHash(){ try { var h = current!==null ? 's/'+current : (topicView ? 't/'+topicView : (gloss ? (gloss==='list'?'g':'g/'+gloss) : (cheat ? (cheat==='list'?'c':'c/'+cheat) : (ack ? 'a' : '')))); if (location.hash.replace(/^#/,'')!==h) location.hash = h; } catch(e) {} }
+function show(){
+  if (current!==null){ renderSection(current); return; }
+  renderSearch();
+  if (restoreY!==null){ window.scrollTo(0,restoreY); restoreY=null; }
+}
+function nav(id){
+  if (id!==null && current===null) savedY = window.scrollY;
+  current = id; ack = false; show(); setHash();
+}
+function navAck(on){
+  if (on && !ack) savedY = window.scrollY;
+  ack = on; cheat = null; gloss = null; topicView = null; current = null; show(); setHash();
+}
+function navCheat(c){
+  if (c!==null && cheat===null) savedY = window.scrollY;
+  cheat = c; ack = false; gloss = null; topicView = null; current = null; show(); setHash();
+}
+function navGloss(g){
+  if (g!==null && gloss===null) savedY = window.scrollY;
+  gloss = g; ack = false; cheat = null; topicView = null; current = null; show(); setHash();
+}
+function navTopic(t){
+  if (t!==null && topicView===null) savedY = window.scrollY;
+  topicView = t; ack = false; gloss = null; cheat = null; current = null; show(); setHash();
+}
+window.addEventListener('hashchange', function(){
+  var p = parseHash(), t = parseTopic(), g = parseGloss(), c = parseCheat(), a = parseAck();
+  if (p!==current || (p===null && (t!==topicView || g!==gloss || c!==cheat || a!==ack))){
+    if (p===null) restoreY = savedY;
+    current = p; if (p===null){ topicView = t; gloss = g; cheat = c; ack = a; }
+    show();
+  }
+});
+document.addEventListener('click', function(e){
+  var tf = e.target.closest && e.target.closest('.tfchip');
+  if (tf){ var id = tf.getAttribute('data-t'); if (filters.has(id)) filters.delete(id); else filters.add(id); renderSearch(); return; }
+  if (e.target.closest && e.target.closest('.tclear')){ filters.clear(); renderSearch(); return; }
+  var chip = e.target.closest && e.target.closest('.chip');
+  if (chip){ topicView = null; gloss = null; cheat = null; ack = false; $q.value = chip.getAttribute('data-q'); renderSearch(); window.scrollTo(0,0); return; }
+  if (e.target.closest && e.target.closest('a.homelink')){ e.preventDefault(); goHome(); return; }
+  var ak = e.target.closest && e.target.closest('a[href="#a"]');
+  if (ak){ e.preventDefault(); navAck(true); return; }
+  var ab = e.target.closest && e.target.closest('a.aback');
+  if (ab){ e.preventDefault(); restoreY = savedY; navAck(false); return; }
+  var ca = e.target.closest && e.target.closest('a[href^="#c"]');
+  if (ca){ e.preventDefault(); var cv = ca.getAttribute('href'); navCheat(cv==='#c' ? 'list' : decodeURIComponent(cv.slice(3))); return; }
+  var cb = e.target.closest && e.target.closest('a.cback');
+  if (cb){ e.preventDefault(); restoreY = savedY; navCheat(cheat==='list' || !CHEAT_BY_ID[cheat] ? null : 'list'); return; }
+  var ga = e.target.closest && e.target.closest('a[href^="#g"]');
+  if (ga){ e.preventDefault(); var gv = ga.getAttribute('href'); navGloss(gv==='#g' ? 'list' : decodeURIComponent(gv.slice(3))); return; }
+  var gb = e.target.closest && e.target.closest('a.gback');
+  if (gb){ e.preventDefault(); restoreY = savedY; navGloss(gloss==='list' || !GLOSS_BY_ID[gloss] ? null : 'list'); return; }
+  var ta = e.target.closest && e.target.closest('a[href^="#t/"]');
+  if (ta){ e.preventDefault(); navTopic(decodeURIComponent(ta.getAttribute('href').slice(3))); return; }
+  var a = e.target.closest && e.target.closest('a[href^="#s/"]');
+  if (a){
+    e.preventDefault();
+    var sid = decodeURIComponent(a.getAttribute('href').slice(3));
+    secCtx = null;
+    if (current===null){
+      if (gloss && GLOSS_BY_ID[gloss] && GLOSS_BY_ID[gloss].re) secCtx = {id:sid, re:GLOSS_BY_ID[gloss].re};
+      else if (cheat && CHEAT_BY_ID[cheat]){ var qb = a.closest('.csi'); if (qb && qb.querySelector('blockquote')) secCtx = {id:sid, quote:qb.querySelector('blockquote').textContent}; }
+    }
+    nav(decodeURIComponent(a.getAttribute('href').slice(3))); return; }
+  var tb = e.target.closest && e.target.closest('a.tback');
+  if (tb){ e.preventDefault(); restoreY = savedY; navTopic(null); return; }
+  var back = e.target.closest && e.target.closest('a.back');
+  if (back){ e.preventDefault(); restoreY = savedY; nav(null); }
+});
+var timer = null;
+$q.addEventListener('input', function(){
+  clearTimeout(timer);
+  timer = setTimeout(function(){ if ($q.value.trim()){ topicView = null; gloss = null; cheat = null; ack = false; } if (current!==null){ nav(null); } else { renderSearch(); setHash(); } }, 70);
+});
+function goHome(){
+  $q.value=''; $q.blur(); topicView=null; gloss=null; cheat=null; ack=false; filters.clear(); lastQuery=''; lastSearch=null;
+  SUGGEST = pickSuggest(); current=null; restoreY=null; show(); setHash(); window.scrollTo(0,0);
+}
+document.getElementById('clear').addEventListener('click', function(){ $q.value=''; topicView=null; gloss=null; cheat=null; ack=false; nav(null); $q.focus(); });
+$q.addEventListener('keydown', function(e){ if (e.key==='Enter'){ $q.blur(); } });
+
+window.rulebook = { search:function(q){ return search(q).results.map(function(r){ return {id:r.id, score:r.score}; }); }, sections:SECTIONS.map(function(s){ return s.id; }) };
+current = parseHash(); if (current===null){ topicView = parseTopic(); gloss = parseGloss(); cheat = parseCheat(); ack = parseAck(); }
+show();
+})();
+(function(){
+  var b=document.getElementById('themebtn');
+  function cur(){return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';}
+  function label(){b.textContent=cur()==='dark'?'Light mode':'Dark mode';}
+  b.addEventListener('click',function(){
+    var t=cur()==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',t);
+    try{localStorage.setItem('theme',t);}catch(e){}
+    label();
+  });
+  label();
+})();
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
+</html>
